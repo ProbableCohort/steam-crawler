@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <base href="/">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+
+    <script type="text/javascript" src="/javascripts/classes/Exception.class.js"></script>
+
+    <script type="text/javascript" src="/javascripts/steamCrawlerApp.js"></script>
+    <script type="text/javascript" src="/javascripts/s/mainService.js"></script>
+    <script type="text/javascript" src="/javascripts/s/steamApiService.js"></script>
+    <script type="text/javascript" src="/javascripts/s/crawlerApiService.js"></script>
+    <script type="text/javascript" src="/javascripts/c/mainCtrl.js"></script>
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
+  </head>
+  <body ng-app="steamCrawlerApp" ng-cloak>
+    <div class="container" ng-controller="mainCtrl">
+      <div class="jumbotron">
+        <h1>Steam Crawler</h1>
+      </div>
+      <div class="row">
+        <div class="form-group col-xs-4">
+          <label>PlayerID</label>
+          <input class="form-control" type="text" ng-blur="findPlayerInfo(player.steamid)" ng-model="player.steamid" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="media">
+            <div class="media-left">
+              <img class="media-object" ng-src="{{player.avatarmedium}}" />
+            </div>
+            <div class="media-body">
+              <div class="col-sm-6">
+                <h4 class="media-heading">
+                  {{player.personaname}}
+                </h4>
+                <div ng-class="{ 'text-success' : player.status == 'GREEN', 'text-danger' : player.status == 'RED', 'text-warning' : player.status == 'YELLOW' }">
+                  <strong>{{determinePersonaState(player.personastate)}}</strong>
+                </div>
+                <div class="text-muted">
+                  {{player.friends.length}} Friends
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="media-heading">
+                  test
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
