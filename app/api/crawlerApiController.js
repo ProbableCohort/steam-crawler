@@ -20,39 +20,63 @@ api.get('/user/:id', function(req, res) {
 })
 
 api.post('/user', function(req, res) {
-  SteamUser
-    .find({ steamid : req.body.steamid })
-    .exec(function (err, user) {
-      if (err)
-        console.log(err.stack);
-      var foundUser;
-      if (user.length && user[0].steamid == req.body.steamid) {
-        foundUser = user[0];
-      }
-      if (foundUser) {
-        req.body.personahistory = foundUser.personahistory || [];
-        if (req.body.personaname != foundUser.personaname) {
-          var persona = {
-            personaname : foundUser.personaname,
-            lastseen : foundUser.updatedAt
-          }
-          req.body.personahistory.push(persona);
-        }
-        SteamUser
-          .findOneAndUpdate({ _id : foundUser._id }, req.body)
-          .exec(function (err, event) {
-            if (err)
-              res.send(err);
-            res.send(event);
-        })
-      } else {
-        SteamUser.create(req.body, function(err, e) {
-          if (err)
-            console.log(err.stack);
-          res.send(e);
-        })
-      }
-    })
+  if (req.body.steamid) {
+    persistProfile(req.body, res);
+  } else {
+    var profileSteamIds = [];
+    for (var i in req.body) {
+      var profile = req.body[i];
+      profileSteamIds.push(profile.steamid);
+      persistProfile(profile);
+    }
+    SteamUser
+      .find({ steamid : { $in : profileSteamIds }})
+      .exec(function(err, users) {
+        if (err)
+          console.log(err.stack);
+        res.send(users);
+      })
+  }
 })
+
+function persistProfile(profile, res) {
+    SteamUser
+      .find({ steamid : profile.steamid })
+      .exec(function (err, user) {
+        if (err)
+          console.log(err.stack);
+        var foundUser;
+        if (user.length && user[0].steamid == profile.steamid) {
+          foundUser = user[0];
+        }
+        if (foundUser) {
+          profile.personahistory = foundUser.personahistory || [];
+          if (profile.personaname != foundUser.personaname) {
+            var persona = {
+              personaname : foundUser.personaname,
+              lastseen : foundUser.updatedAt
+            }
+            profile.personahistory.push(persona);
+          }
+          SteamUser
+            .findOneAndUpdate({ _id : foundUser._id }, profile)
+            .exec(function (err, event) {
+              if (res) {
+                if (err)
+                  res.send(err);
+                res.send(event);
+              }
+          })
+        } else {
+          SteamUser.create(profile, function(err, e) {
+            if (res) {
+              if (err)
+                console.log(err.stack);
+              res.send(e);
+            }
+          })
+        }
+      })
+}
 
 module.exports = api;

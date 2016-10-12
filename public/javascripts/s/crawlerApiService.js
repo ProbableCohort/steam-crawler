@@ -18,7 +18,14 @@
 
     function user(id) {
       var URI = BASE_URI + '/user/:id';
-      return $resource(URI);
+      var PARAMS = {};
+      var OPTIONS = {
+        'saveAll' : {
+          method : 'POST',
+          isArray : true
+        }
+      }
+      return $resource(URI, PARAMS, OPTIONS);
     }
   }
 

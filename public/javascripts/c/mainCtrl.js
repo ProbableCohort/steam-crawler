@@ -7,11 +7,13 @@
   function MainCtrl($scope, $q, SteamApiService, CrawlerApiService) {
 
     $scope.findPlayerInfo = function(id) {
-      $scope.player = SteamApiService.GetPlayerSummaries(id).get(function() {
+      SteamApiService.GetPlayerSummaries(id).get(function(player) {
 
-        CrawlerApiService.user().save($scope.player);
+        $scope.player = CrawlerApiService.user().save(player, function() {
+          console.log($scope.player);
+        });
         SteamApiService.GetFriendList(id).query(function(friends) {
-          $scope.player.friends = [];
+          player.friends = [];
           if (!friends.length) {
             return;
           };
@@ -19,8 +21,8 @@
           angular.forEach(friends, function(friend) {
             friendsIds.push(friend.steamid);
           })
-          $scope.player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
-            CrawlerApiService.user().save($scope.player.friends);
+          player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
+            $scope.player.friends = CrawlerApiService.user().saveAll(player.friends);
           });
         });
       });
