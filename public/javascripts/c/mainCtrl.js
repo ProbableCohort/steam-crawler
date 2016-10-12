@@ -6,15 +6,19 @@
 
   function MainCtrl($scope, $q, SteamApiService, CrawlerApiService) {
 
+    $scope.history = [];
+
     $scope.findPlayerInfo = function(id) {
+      $scope.ready = false;
+      if ($scope.player)
+        $scope.history.push($scope.player);
       SteamApiService.GetPlayerSummaries(id).get(function(player) {
 
-        $scope.player = CrawlerApiService.user().save(player, function() {
-          console.log($scope.player);
-        });
+        $scope.player = CrawlerApiService.user().save(player);
         SteamApiService.GetFriendList(id).query(function(friends) {
-          player.friends = [];
+          $scope.player.friends = [];
           if (!friends.length) {
+            $scope.ready = true;
             return;
           };
           var friendsIds = [];
@@ -22,42 +26,46 @@
             friendsIds.push(friend.steamid);
           })
           player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
-            $scope.player.friends = CrawlerApiService.user().saveAll(player.friends);
+            $scope.player.friends = CrawlerApiService.user().saveAll(player.friends, function() {
+              $scope.ready = true;
+            });
           });
         });
+
       });
     }
 
-    $scope.determinePersonaState = function(stateId) {
+    $scope.determinePersonaState = function(entity) {
       var state;
+      var stateId = entity.personastate;
       switch(stateId) {
         case 0:
           state = "Offline";
-          $scope.player.status = 'RED';
+          entity.status = 2;
           break;
         case 1:
           state = "Online";
-          $scope.player.status = 'GREEN';
+          entity.status = 0;
           break;
         case 2:
           state = "Busy";
-          $scope.player.status = 'RED';
+          entity.status = 2;
           break;
         case 3:
           state = "Away";
-          $scope.player.status = 'YELLOW';
+          entity.status = 1;
           break;
         case 4:
           state = "Snooze";
-          $scope.player.status = 'RED';
+          entity.status = 2;
           break;
         case 5:
           state = "Looking To Trade";
-          $scope.player.status = 'GREEN';
+          entity.status = 1;
           break;
         case 6:
           state = "Looking To Play";
-          $scope.player.status = 'GREEN';
+          entity.status = 1;
           break;
         default:
           break;
@@ -65,9 +73,6 @@
       return state;
     }
 
-    $scope.player = {
-      steamid : 76561197972363720
-    }
     $scope.findPlayerInfo(76561197972363720);
   }
 

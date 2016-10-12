@@ -17,6 +17,7 @@
     <script type="text/javascript" src="/javascripts/c/mainCtrl.js"></script>
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 
   </head>
   <body ng-app="steamCrawlerApp" ng-cloak>
@@ -30,8 +31,20 @@
           <input class="form-control" type="text" ng-blur="findPlayerInfo(player.steamid)" ng-model="player.steamid" />
         </div>
       </div>
-      <div class="row">
+      <div class="row" ng-show="history.length">
         <div class="col-xs-12">
+          <h4>Previous Searches</h4>
+        </div>
+        <div class="col-sm-4" ng-repeat="player in history">
+          <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12" ng-show="!ready">
+          Loading Player Data
+        </div>
+        <div class="col-xs-12" ng-show="ready">
+          <h3>Player Found</h3>
           <div class="media">
             <div class="media-left">
               <img class="media-object" ng-src="{{player.avatarmedium}}" />
@@ -41,8 +54,8 @@
                 <h4 class="media-heading">
                   {{player.personaname}}
                 </h4>
-                <div ng-class="{ 'text-success' : player.status == 'GREEN', 'text-danger' : player.status == 'RED', 'text-warning' : player.status == 'YELLOW' }">
-                  <strong>{{determinePersonaState(player.personastate)}}</strong>
+                <div ng-class="{ 'text-success' : player.status == 0, 'text-danger' : player.status == 2, 'text-warning' : player.status == 1 }">
+                  <strong>{{determinePersonaState(player)}}</strong>
                 </div>
                 <div class="text-muted">
                   {{player.friends.length}} Friends
@@ -50,7 +63,22 @@
               </div>
               <div class="col-sm-6">
                 <div class="media-heading">
-                  test
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 ng-show="player.friends.length">Friends</h3>
+          <div style="margin-left: 30px;">
+            <div class="media col-sm-6" ng-repeat="friend in player.friends | orderBy:'status'">
+              <div class="media-left">
+                <img class="media-object" ng-src="{{friend.avatar}}" />
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">
+                  <a ng-click="findPlayerInfo(friend.steamid)">{{friend.personaname}}</a>
+                </h4>
+                <div ng-class="{ 'text-success' : friend.status == 0, 'text-danger' : friend.status == 2, 'text-warning' : friend.status == 1 }">
+                  <strong>{{determinePersonaState(friend)}}</strong>
                 </div>
               </div>
             </div>
