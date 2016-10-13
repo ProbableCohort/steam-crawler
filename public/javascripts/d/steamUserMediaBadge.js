@@ -24,10 +24,11 @@
 
       function linkFn(scope, el, attrs) {
         // scope - directive scope
-        // scope.$parent - ng-repeat scope
-        // scope.$parent.$parent - controller scope
+        // scope.$parent - controller scope
         var controllerScope = scope.$parent;
         if (!controllerScope.findPlayerInfo) {
+          // scope.$parent - ng-repeat scope
+          // scope.$parent.$parent - controller scope
           controllerScope = scope.$parent.$parent;
         }
         scope.findPlayerInfo = controllerScope.findPlayerInfo;
