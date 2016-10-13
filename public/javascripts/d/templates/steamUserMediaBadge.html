@@ -1,0 +1,26 @@
+<div class="media">
+  <div class="media-left">
+    <img class="media-object" ng-src="{{steamUser.avatarmedium}}" />
+  </div>
+  <div class="media-body">
+    <div class="col-sm-6">
+      <h4 class="media-heading">
+        {{steamUser.personaname}}
+        <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
+      </h4>
+      <div>
+        <strong ng-class="{ 'text-success' : steamUser.status == 0, 'text-danger' : steamUser.status == 2, 'text-warning' : steamUser.status == 1 }">
+          {{determinePersonaState(steamUser)}}
+        </strong>
+        <span ng-if="steamUser.status == 2"> - Last online @ {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
+      </div>
+      <div class="text-muted">
+        {{steamUser.friends.length}} Friends
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="media-heading">
+      </div>
+    </div>
+  </div>
+</div>

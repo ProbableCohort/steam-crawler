@@ -18,6 +18,7 @@
     <script type="text/javascript" src="/javascripts/c/mainCtrl.js"></script>
 
     <script type="text/javascript" src="/javascripts/d/steamPersonaHistoryDropdown.js"></script>
+    <script type="text/javascript" src="/javascripts/d/steamUserMediaBadge.js"></script>
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -50,30 +51,7 @@
         </div>
         <div class="col-xs-12" ng-show="ready">
           <h3>Player Found</h3>
-          <div class="media">
-            <div class="media-left">
-              <img class="media-object" ng-src="{{player.avatarmedium}}" />
-            </div>
-            <div class="media-body">
-              <div class="col-sm-6">
-                <h4 class="media-heading">
-                  {{player.personaname}}
-                  <steam-persona-history-dropdown ng-model="player.personahistory"></steam-persona-history-dropdown>
-                </h4>
-                <div>
-                  <strong ng-class="{ 'text-success' : player.status == 0, 'text-danger' : player.status == 2, 'text-warning' : player.status == 1 }">{{determinePersonaState(player)}}</strong>
-                  <span ng-if="player.status == 2"> - Last online @ {{player.lastlogoff * 1000 | date:'short'}}</span>
-                </div>
-                <div class="text-muted">
-                  {{player.friends.length}} Friends
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="media-heading">
-                </div>
-              </div>
-            </div>
-          </div>
+          <steam-user-media-badge ng-model="player"></steam-user-media-badge>
           <h3 ng-show="player.friends.length">Friends</h3>
           <div style="margin-left: 30px;">
             <div class="media col-sm-6" ng-repeat="friend in player.friends | orderBy:'status'">
