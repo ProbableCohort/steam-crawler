@@ -1,0 +1,14 @@
+<span uib-dropdown dropdown-append-to-body ng-show="personahistory.length">
+  <a class="btn btn-steam btn-xs" id="personahistory-dropdown" uib-dropdown-toggle><span class="fa fa-caret-down"></span></a>
+  <ul class="dropdown-menu dropdown-menu-steam" uib-dropdown-menu aria-labelledby="personahistory-dropdown">
+    <li>
+      This user has previously been known as:
+    </li>
+    <li ng-repeat="persona in personahistory | limitTo:10">
+      {{persona.personaname}}
+    </li>
+    <li ng-show="player.personahistory.length > 10">
+      ...and {{player.personahistory.length - 10}} other names.
+    </li>
+  </ul>
+</span>

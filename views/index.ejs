@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/classes/Exception.class.js"></script>
 
@@ -16,7 +17,10 @@
     <script type="text/javascript" src="/javascripts/s/crawlerApiService.js"></script>
     <script type="text/javascript" src="/javascripts/c/mainCtrl.js"></script>
 
+    <script type="text/javascript" src="/javascripts/d/steamPersonaHistoryDropdown.js"></script>
+
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link href="https://fonts.googleapis.com/css?family=Duru+Sans" rel="stylesheet">
 
@@ -54,9 +58,11 @@
               <div class="col-sm-6">
                 <h4 class="media-heading">
                   {{player.personaname}}
+                  <steam-persona-history-dropdown ng-model="player.personahistory"></steam-persona-history-dropdown>
                 </h4>
-                <div ng-class="{ 'text-success' : player.status == 0, 'text-danger' : player.status == 2, 'text-warning' : player.status == 1 }">
-                  <strong>{{determinePersonaState(player)}}</strong>
+                <div>
+                  <strong ng-class="{ 'text-success' : player.status == 0, 'text-danger' : player.status == 2, 'text-warning' : player.status == 1 }">{{determinePersonaState(player)}}</strong>
+                  <span ng-if="player.status == 2"> - Last online @ {{player.lastlogoff * 1000 | date:'short'}}</span>
                 </div>
                 <div class="text-muted">
                   {{player.friends.length}} Friends

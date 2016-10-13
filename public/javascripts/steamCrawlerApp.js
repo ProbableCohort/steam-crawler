@@ -1,6 +1,6 @@
 /* global angular */
 (function(angular) {
-  angular.module('steamCrawlerApp', ['crawlerServices', 'crawlerControllers', 'ngResource']);
+  angular.module('steamCrawlerApp', ['crawlerServices', 'crawlerControllers', 'crawlerDirectives', 'ngResource', 'ui.bootstrap']);
 
   angular.module('steamCrawlerApp').config(function($resourceProvider) {
     $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -14,5 +14,6 @@
 
   angular.module('crawlerServices', []);
   angular.module('crawlerControllers', []);
+  angular.module('crawlerDirectives', []);
 
 })(angular);

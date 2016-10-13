@@ -7,6 +7,12 @@ body {
 
 a {
   color: #c6d4df;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #656f77;
 }
 
 .jumbotron {
@@ -16,4 +22,14 @@ a {
 .media {
   margin-top: 0px;
   margin-bottom: 15px;
+}
+
+.btn.btn-steam {
+  color: #67c1f5 !important;
+  background: rgba(103, 193, 245, 0.2);
+}
+
+.dropdown-menu.dropdown-menu-steam {
+  color: #67c1f5 !important;
+  background: #2e3d50;
 }
