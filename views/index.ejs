@@ -51,22 +51,10 @@
         </div>
         <div class="col-xs-12" ng-show="ready">
           <h3>Player Found</h3>
-          <steam-user-media-badge ng-model="player"></steam-user-media-badge>
+          <steam-user-media-badge ng-model="player" col="2"></steam-user-media-badge>
           <h3 ng-show="player.friends.length">Friends</h3>
           <div style="margin-left: 30px;">
-            <div class="media col-sm-6" ng-repeat="friend in player.friends | orderBy:'status'">
-              <div class="media-left">
-                <img class="media-object" ng-src="{{friend.avatar}}" />
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading">
-                  <a ng-click="findPlayerInfo(friend.steamid)">{{friend.personaname}}</a>
-                </h4>
-                <div ng-class="{ 'text-success' : friend.status == 0, 'text-danger' : friend.status == 2, 'text-warning' : friend.status == 1 }">
-                  <strong>{{determinePersonaState(friend)}}</strong>
-                </div>
-              </div>
-            </div>
+            <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:'status'"></steam-user-media-badge>
           </div>
         </div>
       </div>

@@ -11,14 +11,30 @@
         require: 'ngModel',
         templateUrl: 'javascripts/d/templates/steamUserMediaBadge.html',
         scope: {
-          steamUser : '=ngModel'
+          steamUser : '=ngModel',
+          col : '='
         },
-        controller: ctrlFn
+        controller: ctrlFn,
+        link : linkFn
       }
 
       return directive;
 
       /////////////////
+
+      function linkFn(scope, el, attrs) {
+        // scope - directive scope
+        // scope.$parent - ng-repeat scope
+        // scope.$parent.$parent - controller scope
+        var controllerScope = scope.$parent;
+        console.log(controllerScope.findPlayerInfo);
+        if (!controllerScope.findPlayerInfo) {
+          console.log('findPlayerInfo not found, restting controllerScope');
+          controllerScope = scope.$parent.$parent;
+          console.log(controllerScope.findPlayerInfo);
+        }
+        scope.findPlayerInfo = controllerScope.findPlayerInfo;
+      }
 
       function ctrlFn($scope) {
 

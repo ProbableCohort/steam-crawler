@@ -3,9 +3,10 @@
     <img class="media-object" ng-src="{{steamUser.avatarmedium}}" />
   </div>
   <div class="media-body">
-    <div class="col-sm-6">
+    <div class="col-sm-12" ng-class="{ 'col-sm-6' : col == 2 }">
       <h4 class="media-heading">
-        {{steamUser.personaname}}
+        <span ng-show="col > 1">{{steamUser.personaname}}</span>
+        <a ng-click="findPlayerInfo(steamUser.steamid)" ng-show="col == 1">{{steamUser.personaname}}</a>
         <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
       </h4>
       <div>
@@ -18,7 +19,7 @@
         {{steamUser.friends.length}} Friends
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" ng-show="col > 1">
       <div class="media-heading">
       </div>
     </div>
