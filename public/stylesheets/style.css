@@ -1,10 +1,16 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Duru Sans', sans-serif;
+  color: #b8b6b4;
+  background: #1b2838;
 }
 
 a {
-  color: #00B7FF;
+  color: #c6d4df;
+}
+
+.jumbotron {
+  background: #171a21;
 }
 
 .media {

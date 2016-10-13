@@ -18,12 +18,13 @@
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Duru+Sans" rel="stylesheet">
 
   </head>
   <body ng-app="steamCrawlerApp" ng-cloak>
     <div class="container" ng-controller="mainCtrl">
       <div class="jumbotron">
-        <h1>Steam Crawler</h1>
+        <h1>{{ 'Steam Crawler' | uppercase }}</h1>
       </div>
       <div class="row">
         <div class="form-group col-xs-4">

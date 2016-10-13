@@ -36,6 +36,8 @@
     }
 
     $scope.determinePersonaState = function(entity) {
+      if (!entity)
+        return;
       var state;
       var stateId = entity.personastate;
       switch(stateId) {
