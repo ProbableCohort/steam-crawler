@@ -18,6 +18,10 @@ api.get('/user/all/count', function(req, res) {
   CrawlerApiService.countAllProfiles(res);
 })
 
+api.get('/user/last/:count', function(req, res) {
+  CrawlerApiService.findLastProfilesByCount(req.params.count, res);
+})
+
 api.get('/user/:id', function(req, res) {
   CrawlerApiService.findProfileBySteamId(req.params.id, res);
 })

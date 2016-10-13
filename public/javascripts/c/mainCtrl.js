@@ -14,10 +14,9 @@
         $scope.history.push($scope.player);
       SteamApiService.GetPlayerSummaries(id).get(function(player) {
 
-        $scope.player = CrawlerApiService.user().save(player);
         SteamApiService.GetFriendList(id).query(function(friends) {
-          $scope.player.friends = [];
           if (!friends.length) {
+            $scope.player = CrawlerApiService.user().save(player);
             $scope.ready = true;
             return;
           };
@@ -27,7 +26,9 @@
           })
           player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
             CrawlerApiService.user().saveAll(player.friends, function() {
-              $scope.player.friends = CrawlerApiService.user().query({ ids : friendsIds.join(',') })
+              $scope.player = CrawlerApiService.user().save(player, function() {
+                $scope.player.friends = CrawlerApiService.user().query({ ids : friendsIds.join(',') })
+              });
               $scope.ready = true;
             });
           });

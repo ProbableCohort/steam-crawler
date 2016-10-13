@@ -4,6 +4,7 @@ var service = {
   findProfileBySteamId : findProfileBySteamId,
   findProfilesBySteamIds : findProfilesBySteamIds,
   findAllProfiles : findAllProfiles,
+  findLastProfilesByCount : findLastProfilesByCount,
   countAllProfiles : countAllProfiles,
   findProfilesWithPersonaHistory : findProfilesWithPersonaHistory,
   persistProfile : persistProfile,
@@ -59,6 +60,36 @@ function findProfilesBySteamIds(ids, res) {
   }
   SteamUser
     .aggregate([match, sort, group])
+    .exec(function (err, users) {
+      if (err)
+        console.log(err.stack);
+      var profiles = [];
+      for (var i in users) {
+        profiles.push(transformAggregateResponse(users[i]));
+      }
+      res.send(profiles);
+    })
+}
+
+function findLastProfilesByCount(count, res) {
+  count = parseInt(count);
+  var sort = {
+    $sort: {
+      createdAt : -1
+    }
+  }
+  var group = {
+    $group: {
+      _id : "$steamid",
+      profile : { $first : "$$ROOT" },
+      personahistory : { $push : "$$ROOT" }
+    }
+  }
+  var limit = {
+    $limit : count
+  }
+  SteamUser
+    .aggregate([sort, group, sort, limit])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
