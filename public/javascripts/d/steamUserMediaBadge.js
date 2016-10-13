@@ -27,11 +27,8 @@
         // scope.$parent - ng-repeat scope
         // scope.$parent.$parent - controller scope
         var controllerScope = scope.$parent;
-        console.log(controllerScope.findPlayerInfo);
         if (!controllerScope.findPlayerInfo) {
-          console.log('findPlayerInfo not found, restting controllerScope');
           controllerScope = scope.$parent.$parent;
-          console.log(controllerScope.findPlayerInfo);
         }
         scope.findPlayerInfo = controllerScope.findPlayerInfo;
       }
