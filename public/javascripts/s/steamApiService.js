@@ -6,7 +6,7 @@
 
   function SteamApiService($resource) {
 
-    var BASE_URI = '/api/steam'
+    var BASE_URI = '/api/v1/steam'
 
     var service = {
       GetSchemaForGame : GetSchemaForGame,

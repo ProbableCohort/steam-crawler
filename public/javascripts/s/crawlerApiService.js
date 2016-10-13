@@ -6,7 +6,7 @@
 
   function CrawlerApiService($resource) {
 
-    var BASE_URI = '/api/crawler'
+    var BASE_URI = '/api/v1/crawler'
 
     var service = {
       user : user

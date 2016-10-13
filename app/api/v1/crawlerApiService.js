@@ -1,5 +1,4 @@
-
-var SteamUser = require('../models/steamUser');
+var SteamUser = require('../../models/steamUser');
 
 var service = {
   findProfileBySteamId : findProfileBySteamId,

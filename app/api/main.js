@@ -2,14 +2,12 @@ var express = require('express'),
     api     = express.Router(),
     request = require('request');
 
-var steamApiController  = require('./steamApiController'),
-    crawlerApiController = require('./crawlerApiController');
+var v1  = require('./v1/main');
 
 api.use(function(req, res, next) {
 	next();
 });
 
-api.use('/steam', steamApiController);
-api.use('/crawler', crawlerApiController);
+api.use('/v1', v1);
 
 module.exports = api;

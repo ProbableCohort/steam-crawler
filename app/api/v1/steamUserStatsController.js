@@ -1,7 +1,7 @@
 var express = require('express'),
     api     = express.Router(),
     request = require('request'),
-    KEYS    = require('../../private/keys');
+    KEYS    = require('../../../private/keys');
 
 var BASE_URI = 'http://api.steampowered.com/' + 'ISteamUserStats/';
 
