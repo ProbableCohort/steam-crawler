@@ -11,7 +11,7 @@ var users = require('./routes/users');
 var api = require('./app/api/main');
 
 var app = express();
-var configDB = require('./private/database.js');
+var configDB = require('./app/database.js');
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
