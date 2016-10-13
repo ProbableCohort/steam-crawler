@@ -2,14 +2,12 @@ var express = require('express'),
     api     = express.Router(),
     request = require('request');
 
-var v1  = require('./v1/main'),
-    v2  = require('./v2/main');
+var crawlerApiController = require('./crawlerApiController');
 
 api.use(function(req, res, next) {
 	next();
 });
 
-api.use('/v1', v1);
-api.use('/v2', v2);
+api.use('/crawler', crawlerApiController);
 
 module.exports = api;

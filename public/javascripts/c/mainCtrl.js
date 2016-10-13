@@ -26,7 +26,8 @@
             friendsIds.push(friend.steamid);
           })
           player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
-            $scope.player.friends = CrawlerApiService.user().saveAll(player.friends, function() {
+            CrawlerApiService.user().saveAll(player.friends, function() {
+              $scope.player.friends = CrawlerApiService.user().query({ ids : friendsIds.join(',') })
               $scope.ready = true;
             });
           });

@@ -4,7 +4,7 @@
     <li>
       <strong>This user has previously been known as:</strong>
     </li>
-    <li class="personahistory-list-item" ng-repeat="persona in personahistory | limitTo:10">
+    <li class="personahistory-list-item" ng-repeat="persona in personahistory | unique:'personaname' | limitTo:10">
       {{persona.personaname}}
     </li>
     <li ng-show="player.personahistory.length > 10">
