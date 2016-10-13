@@ -10,6 +10,14 @@ api.use(function(req, res, next) {
   next();
 });
 
+api.get('/user/all', function(req, res) {
+  CrawlerApiService.findAllProfiles(res);
+})
+
+api.get('/user/all/count', function(req, res) {
+  CrawlerApiService.countAllProfiles(res);
+})
+
 api.get('/user/:id', function(req, res) {
   CrawlerApiService.findProfileBySteamId(req.params.id, res);
 })

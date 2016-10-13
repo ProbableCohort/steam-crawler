@@ -3,6 +3,8 @@ var SteamUser = require('../../models/steamUser');
 var service = {
   findProfileBySteamId : findProfileBySteamId,
   findProfilesBySteamIds : findProfilesBySteamIds,
+  findAllProfiles : findAllProfiles,
+  countAllProfiles : countAllProfiles,
   findProfilesWithPersonaHistory : findProfilesWithPersonaHistory,
   persistProfile : persistProfile,
   persistProfiles : persistProfiles
@@ -65,6 +67,45 @@ function findProfilesBySteamIds(ids, res) {
         profiles.push(transformAggregateResponse(users[i]));
       }
       res.send(profiles);
+    })
+}
+
+function findAllProfiles(res) {
+  var sort = {
+    $sort: {
+      createdAt : -1
+    }
+  }
+  var group = {
+    $group: {
+      _id : "$steamid",
+      profile : { $first : "$$ROOT" },
+      personahistory : { $push : "$$ROOT" }
+    }
+  }
+  SteamUser
+    .aggregate([sort, group])
+    .exec(function (err, users) {
+      if (err)
+        console.log(err.stack);
+      var profiles = [];
+      for (var i in users) {
+        profiles.push(transformAggregateResponse(users[i]));
+      }
+      res.send(profiles);
+    })
+}
+
+function countAllProfiles(res) {
+  SteamUser
+    .distinct('steamid')
+    .exec(function (err, count) {
+      if (err)
+        console.log(err.stack);
+      var response = {
+        profileCount : count.length
+      }
+      res.send(response);
     })
 }
 
