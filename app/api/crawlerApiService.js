@@ -43,7 +43,8 @@ function persistProfile(profile, res) {
           if (profile.personaname != foundUser.personaname) {
             var persona = {
               personaname : foundUser.personaname,
-              lastseen : foundUser.updatedAt
+              lastseen : foundUser.updatedAt,
+              avatarfull : foundUser.avatarfull
             }
             profile.personahistory.push(persona);
           }

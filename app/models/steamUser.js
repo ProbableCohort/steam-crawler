@@ -22,7 +22,11 @@ var steamUserSchema = mongoose.Schema({
   "realname": String,
   "steamid": String,
   "timecreated": Number,
-  "personahistory": [{ "personaname" : String, "lastseen" : Date }]
+  "personahistory": [{
+    "personaname" : String,
+    "lastseen" : Date,
+    "avatarfull" : String
+  }]
 }, {
   timestamps : true
 });

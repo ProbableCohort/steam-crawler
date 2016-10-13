@@ -22,10 +22,7 @@
 
       function ctrlFn($scope) {
 
-        console.log($scope);
-
         $scope.determinePersonaState = function(entity) {
-          console.log(entity);
           if (!entity)
             return;
           var state;
