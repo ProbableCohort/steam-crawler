@@ -37,6 +37,17 @@
       });
     }
 
+    $scope.view = {
+      profile : {
+        show : false,
+        name : 'View Profile'
+      },
+      friends : {
+        show : true,
+        name : 'View Friends'
+      }
+    }
+
     $scope.findPlayerInfo(76561197972363720);
   }
 

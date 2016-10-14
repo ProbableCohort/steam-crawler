@@ -31,10 +31,21 @@ a:hover {
   box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 
+.btn.btn-steam:active, .btn.btn-steam.active {
+  background: rgba(103, 193, 245, 0.125);
+  border-color: rgba(30, 34, 53, 0.9);
+}
+
 .form-control-steam {
   color: #67c1f5 !important;
   background-color: rgba(103, 193, 245, 0.2);
-  border-color: rgba(103, 193, 245, 0.2);
+  border-color: rgba(34,63,99,0.2);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.form-control-steam + .input-group-btn .btn-steam {
+  height: 36px;
+  top: -1px;
 }
 
 .dropdown-menu.dropdown-menu-steam {
