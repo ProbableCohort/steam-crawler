@@ -8,6 +8,8 @@
 
     $scope.history = [];
 
+    $scope.recent = CrawlerApiService.user().last({ count : 9 });
+
     $scope.findPlayerInfo = function(id) {
       $scope.ready = false;
       if ($scope.player)
@@ -20,14 +22,14 @@
             $scope.ready = true;
             return;
           };
-          var friendsIds = [];
+          player.friendsList = [];
           angular.forEach(friends, function(friend) {
-            friendsIds.push(friend.steamid);
+            player.friendsList.push(friend.steamid);
           })
-          player.friends = SteamApiService.GetPlayerSummaries(friendsIds).query(function() {
+          player.friends = SteamApiService.GetPlayerSummaries(player.friendsList).query(function() {
             CrawlerApiService.user().saveAll(player.friends, function() {
               $scope.player = CrawlerApiService.user().save(player, function() {
-                $scope.player.friends = CrawlerApiService.user().query({ ids : friendsIds.join(',') })
+                $scope.player.friends = CrawlerApiService.user().query({ ids : player.friendsList.join(',') })
               });
               $scope.ready = true;
             });
@@ -50,7 +52,6 @@
       }
     }
 
-    $scope.findPlayerInfo(76561197972363720);
   }
 
 })(angular);

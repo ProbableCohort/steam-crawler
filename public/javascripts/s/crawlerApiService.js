@@ -17,16 +17,26 @@
     ///////////////
 
     function user(id) {
-      var URI = BASE_URI + '/user/:id';
-      var PARAMS = {};
+      var URI = BASE_URI + '/user/:action/:id';
+      var PARAMS = {
+        id : id || '@count'
+      };
       var OPTIONS = {
         'saveAll' : {
           method : 'POST',
+          isArray : true
+        },
+        'last' : {
+          method : 'GET',
+          params : {
+            action : 'last'
+          },
           isArray : true
         }
       }
       return $resource(URI, PARAMS, OPTIONS);
     }
+
   }
 
 })(angular);

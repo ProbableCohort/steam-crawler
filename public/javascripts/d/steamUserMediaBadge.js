@@ -32,6 +32,8 @@
           controllerScope = scope.$parent.$parent;
         }
         scope.findPlayerInfo = controllerScope.findPlayerInfo;
+
+        scope.small = angular.isDefined(attrs.small);
       }
 
       function ctrlFn($scope) {

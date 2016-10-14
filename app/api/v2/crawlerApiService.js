@@ -2,6 +2,7 @@ var SteamUser = require('../../models/steamUser');
 
 var service = {
   findProfileBySteamId : findProfileBySteamId,
+  findAllRecordsForProfileBySteamId : findAllRecordsForProfileBySteamId,
   findProfilesBySteamIds : findProfilesBySteamIds,
   findAllProfiles : findAllProfiles,
   findLastProfilesByCount : findLastProfilesByCount,
@@ -9,6 +10,29 @@ var service = {
   findProfilesWithPersonaHistory : findProfilesWithPersonaHistory,
   persistProfile : persistProfile,
   persistProfiles : persistProfiles
+}
+
+var unwind = {
+  $unwind: {
+    path : "$friendsList",
+    preserveNullAndEmptyArrays : true
+  }
+}
+
+var group = {
+  $group :{
+    _id : "$steamid",
+    profile : { $last : "$$ROOT" },
+    personahistory : { $addToSet : {
+      personaname : "$personaname",
+      avatarfull : "$avatarfull",
+      personastate : "$personastate"
+    }},
+    activityhistory : { $addToSet : {
+      personastate : "$personastate"
+    }},
+    friendsList : { $addToSet : "$friendsList" }
+  }
 }
 
 function findProfileBySteamId(id, res) {
@@ -19,42 +43,30 @@ function findProfileBySteamId(id, res) {
   }
   var sort = {
     $sort: {
-      createdAt : -1
-    }
-  }
-  var historyGroup = {
-    $group :{
-      _id : "$steamid",
-      profile : { $first : "$$ROOT" },
-      personahistory : { $addToSet : {
-        personaname : "$personaname",
-        avatarfull : "$avatarfull",
-        personastate : "$personastate"
-      }},
-      activityhistory : { $addToSet : {
-        personastate : "$personastate"
-      }}
-    }
-  }
-  var group = {
-    $group: {
-      _id : "$steamid",
-      profile : { $first : "$$ROOT" },
-      personahistory : { $push : "$$ROOT" }
-    }
-  }
-  var project = {
-    $project: {
-      $_id : "$_id.steamid",
-      personahistory : { $addToSet : "$_id" }
+      "profile.createdAt" : -1
     }
   }
   SteamUser
-    .aggregate([match, sort, historyGroup])
+    .aggregate([match, unwind, group, sort])
     .exec(function (err, user) {
       if (err)
         console.log(err.stack);
       res.send(transformAggregateResponse(user[0]));
+    })
+}
+
+function findAllRecordsForProfileBySteamId(id, res) {
+  SteamUser
+    .find({
+      steamid: id,
+    })
+    .sort({
+      "createdAt" : -1
+    })
+    .exec(function (err, records) {
+      if (err)
+        console.log(err.stack);
+      res.send(records);
     })
 }
 
@@ -68,28 +80,23 @@ function findProfilesBySteamIds(ids, res) {
   }
   var sort = {
     $sort: {
-      createdAt : -1
+      "profile.createdAt" : -1
     }
   }
-  var group = {
-    $group :{
-      _id : "$steamid",
-      profile : { $first : "$$ROOT" },
-      personahistory : { $addToSet : {
-        personaname : "$personaname",
-        avatarfull : "$avatarfull",
-        personastate : "$personastate"
-      }},
-      activityhistory : { $addToSet : {
-        personastate : "$personastate"
-      }}
+  var project = {
+    $project: {
+      "_id" : "$_id",
+      "profile" : "$profile",
+      "personahistory" : "$personahistory",
+      "friendsList" : "$friendsList"
     }
   }
   SteamUser
-    .aggregate([match, sort, group])
+    .aggregate([match, sort, unwind, group])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
+      console.log(users ? users.length : null);
       var profiles = [];
       for (var i in users) {
         profiles.push(transformAggregateResponse(users[i]));
@@ -102,21 +109,14 @@ function findLastProfilesByCount(count, res) {
   count = parseInt(count);
   var sort = {
     $sort: {
-      createdAt : -1
-    }
-  }
-  var group = {
-    $group: {
-      _id : "$steamid",
-      profile : { $first : "$$ROOT" },
-      personahistory : { $push : "$$ROOT" }
+      "profile.createdAt" : -1
     }
   }
   var limit = {
     $limit : count
   }
   SteamUser
-    .aggregate([sort, group, sort, limit])
+    .aggregate([unwind, group, sort, limit])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
@@ -131,18 +131,11 @@ function findLastProfilesByCount(count, res) {
 function findAllProfiles(res) {
   var sort = {
     $sort: {
-      createdAt : -1
-    }
-  }
-  var group = {
-    $group: {
-      _id : "$steamid",
-      profile : { $first : "$$ROOT" },
-      personahistory : { $push : "$$ROOT" }
+      "profile.createdAt" : -1
     }
   }
   SteamUser
-    .aggregate([sort, group])
+    .aggregate([unwind, group, sort])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
@@ -196,9 +189,12 @@ function persistProfiles(profiles, res) {
 }
 
 function transformAggregateResponse(response) {
+  if (!response)
+    return null;
   var profile = response.profile;
   profile._id = response._id;
   profile.personahistory = response.personahistory;
+  response.friendsList ? profile.friendsList = response.friendsList : null;
   return profile;
 }
 

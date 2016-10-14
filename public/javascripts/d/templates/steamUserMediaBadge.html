@@ -1,22 +1,22 @@
-<div class="media">
+<div class="media steam-user-media-badge">
   <div class="media-left">
-    <img class="media-object" ng-src="{{steamUser.avatarmedium}}" />
+    <img class="media-object" ng-class="{ 'steam-status-online' : steamUser.status == 0 }" ng-src="{{steamUser.avatarmedium}}" />
   </div>
   <div class="media-body">
-    <div class="col-sm-12" ng-class="{ 'col-sm-6' : col == 2 }">
+    <div class="" ng-class="{ 'col-sm-6' : col == 2, 'col-sm-12' : !small }">
       <h4 class="media-heading">
         <span ng-show="col > 1">{{steamUser.personaname}}</span>
         <a ng-click="findPlayerInfo(steamUser.steamid)" ng-show="col == 1">{{steamUser.personaname}}</a>
         <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
       </h4>
-      <div>
+      <div ng-show="!small">
         <strong ng-class="{ 'text-success' : steamUser.status == 0, 'text-danger' : steamUser.status == 2, 'text-warning' : steamUser.status == 1 }">
           {{determinePersonaState(steamUser)}}
         </strong>
         <span ng-if="steamUser.status == 2"> - Last online @ {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
       </div>
       <div class="text-muted">
-        {{steamUser.friends.length}} Friends
+        {{steamUser.friendsList.length}} Friends
       </div>
     </div>
     <div class="col-sm-6" ng-show="col > 1">

@@ -57,3 +57,12 @@ a:hover {
 .personahistory-list .personahistory-list-item {
   margin-left: 10px;
 }
+
+.steam-user-media-badge {
+  height: 70px;
+}
+
+.steam-status-online {
+  border: 3px solid #3c763d;
+  border-radius: 3px;
+}
