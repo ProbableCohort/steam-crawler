@@ -66,7 +66,8 @@
       general : {
         recent : {
           show : true,
-          name : 'View Recent Profiles'
+          name : 'View Recent Profiles',
+          onShow : $scope.getRecent
         }
       },
       search : {
