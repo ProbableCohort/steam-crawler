@@ -5,6 +5,10 @@ body {
   background: #1b2838;
 }
 
+hr {
+  border-top: 1px solid #67c1f5 !important;
+}
+
 a {
   color: #c6d4df;
   cursor: pointer;
@@ -34,6 +38,15 @@ a:hover {
 .btn.btn-steam:active, .btn.btn-steam.active {
   background: rgba(103, 193, 245, 0.125);
   border-color: rgba(30, 34, 53, 0.9);
+}
+
+.fa-steam-href {
+  color: #67c1f5;
+}
+
+a .fa-steam-href:hover {
+  text-decoration: none;
+  color: rgba(103, 193, 245, 0.6);
 }
 
 .form-control-steam {

@@ -8,7 +8,11 @@
 
     $scope.history = [];
 
-    $scope.recent = CrawlerApiService.user().last({ count : 9 });
+    $scope.getRecent = function() {
+      CrawlerApiService.user().last({ count : 9 }, function(data) {
+        $scope.recent = data;
+      });
+    }
 
     $scope.findPlayerInfo = function(id) {
       $scope.ready = false;
@@ -51,6 +55,12 @@
         }
       }
     }
+
+    $scope.init = function() {
+      $scope.getRecent();
+    }
+
+    $scope.init();
 
   }
 
