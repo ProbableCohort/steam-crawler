@@ -14,15 +14,23 @@
       });
     }
 
+    $scope.findPlayerByName = function(name) {
+      CrawlerApiService.user().query({ personaname : name}, function(results) {
+        $scope.searchResults = results;
+        console.log(results);
+      })
+    }
+
     $scope.findPlayerInfo = function(id) {
       $scope.ready = false;
-      if ($scope.player)
+      if ($scope.player && $scope.player.steamid)
         $scope.history.push($scope.player);
       SteamApiService.GetPlayerSummaries(id).get(function(player) {
 
         SteamApiService.GetFriendList(id).query(function(friends) {
           if (!friends.length) {
             $scope.player = CrawlerApiService.user().save(player);
+            $scope.searchResults = null;
             $scope.ready = true;
             return;
           };
@@ -35,6 +43,7 @@
               $scope.player = CrawlerApiService.user().save(player, function() {
                 $scope.player.friends = CrawlerApiService.user().query({ ids : player.friendsList.join(',') })
               });
+              $scope.searchResults = null;
               $scope.ready = true;
             });
           });

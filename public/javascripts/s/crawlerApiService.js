@@ -18,9 +18,7 @@
 
     function user(id) {
       var URI = BASE_URI + '/user/:action/:id';
-      var PARAMS = {
-        id : id || '@count'
-      };
+      var PARAMS = {};
       var OPTIONS = {
         'saveAll' : {
           method : 'POST',
@@ -32,6 +30,12 @@
             action : 'last'
           },
           isArray : true
+        },
+        'all' : {
+          method : 'GET',
+          params : {
+            action : 'all'
+          }
         }
       }
       return $resource(URI, PARAMS, OPTIONS);

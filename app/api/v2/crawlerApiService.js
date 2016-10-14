@@ -2,6 +2,7 @@ var SteamUser = require('../../models/steamUser');
 
 var service = {
   findProfileBySteamId : findProfileBySteamId,
+  findProfileByPersonaName : findProfileByPersonaName,
   findAllRecordsForProfileBySteamId : findAllRecordsForProfileBySteamId,
   findProfilesBySteamIds : findProfilesBySteamIds,
   findAllProfiles : findAllProfiles,
@@ -52,6 +53,35 @@ function findProfileBySteamId(id, res) {
       if (err)
         console.log(err.stack);
       res.send(transformAggregateResponse(user[0]));
+    })
+}
+
+function findProfileByPersonaName(name, res) {
+  var match = {
+    $match: {
+      personaname : { $regex : name, $options : "i" }
+    }
+  }
+  var unwindPersonaname = {
+    $unwind: {
+      path : "$personaname"
+    }
+  }
+  var sort = {
+    $sort: {
+      "profile.createdAt" : -1
+    }
+  }
+  SteamUser
+    .aggregate([match, unwindPersonaname, match, unwind, group, sort])
+    .exec(function (err, users) {
+      if (err)
+        console.log(err.stack);
+        var profiles = [];
+        for (var i in users) {
+          profiles.push(transformAggregateResponse(users[i]));
+        }
+      res.send(profiles);
     })
 }
 

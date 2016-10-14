@@ -37,8 +37,12 @@ api.get('/user/:id/all', function(req, res) {
 })
 
 api.get('/user/', function(req, res) {
-  var ids = req.query.ids.split(',');
-  CrawlerApiService.findProfilesBySteamIds(ids, res);
+  if (req.query.ids) {
+    var ids = req.query.ids.split(',');
+    CrawlerApiService.findProfilesBySteamIds(ids, res);
+  } else if (req.query.personaname) {
+    CrawlerApiService.findProfileByPersonaName(req.query.personaname, res);
+  }
 })
 
 api.get('/personas', function(req, res) {

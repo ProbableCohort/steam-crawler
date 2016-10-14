@@ -54,29 +54,34 @@
         </div>
         <br />
         <br />
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
-              <label>Steam Name</label>
-              <div class="input-group">
-                <input class="form-control form-control-steam" type="text"
-                  ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
-                <span class="input-group-btn">
-                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
-                </span>
-              </div>
-            </div>
-            <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
-              <label>PlayerID</label>
-              <div class="input-group">
-                <input class="form-control form-control-steam" type="text"
-                  ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"/>
-                <span class="input-group-btn">
-                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
-                </span>
-              </div>
+        <div>
+          <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
+            <label>Steam Name</label>
+            <div class="input-group">
+              <input class="form-control form-control-steam" type="text"
+                ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
+              <span class="input-group-btn">
+                <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+              </span>
             </div>
           </div>
+          <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
+            <label>PlayerID</label>
+            <div class="input-group">
+              <input class="form-control form-control-steam" type="text"
+                ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"/>
+              <span class="input-group-btn">
+                <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12" ng-show="searchResults.length">
+          {{searchResults.length}} results found.
+        </div>
+        <div class="col-xs-6 col-sm-3" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults | unique:'personaname' | limitTo:12">
+          <img ng-src="{{player.avatar}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
+          <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
         </div>
       </div>
       <div class="col-xs-12" ng-show="!ready && !player">
@@ -86,8 +91,8 @@
         <div class="col-xs-12">
           <h4>Previous Searches</h4>
         </div>
-        <div class="col-sm-4" style="margin-bottom: 5px;" ng-repeat="player in history | unique:'personaname'">
-          <img ng-src="{{player.avatar}}" />
+        <div class="col-xs-6 col-sm-3" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in history | unique:'personaname'">
+          <img ng-src="{{player.avatar}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
           <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
         </div>
       </div>
