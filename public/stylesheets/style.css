@@ -19,8 +19,17 @@ a:hover {
   color: #656f77;
 }
 
+.col-xs-12 {
+  margin-bottom: 10px;
+}
+
 .jumbotron {
   background: #171a21;
+}
+
+.jumbotron.jumbotron-slim {
+  padding-top: 15px;
+  padding-bottom: 20px;
 }
 
 .media {

@@ -53,6 +53,22 @@
           show : true,
           name : 'View Friends'
         }
+      },
+      general : {
+        recent : {
+          show : true,
+          name : 'View Recent Profiles'
+        }
+      },
+      search : {
+        steamName : {
+          show : true,
+          name : 'Search by Steam Name'
+        },
+        playerId : {
+          show : true,
+          name : 'Search by SteamID'
+        }
       }
     }
 

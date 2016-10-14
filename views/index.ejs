@@ -30,30 +30,52 @@
   </head>
   <body ng-app="steamCrawlerApp" ng-cloak>
     <div class="container" ng-controller="mainCtrl">
-      <div class="jumbotron">
+      <div class="jumbotron jumbotron-slim">
         <h1><span class="fa fa-steam fa-lg"></span> {{ 'Steam Crawler' | uppercase }}</h1>
       </div>
       <div class="row">
         <div class="col-xs-12">
+            <custom-button-group ng-model="views.general"></custom-button-group>
+        </div>
+        <div class="col-xs-12" ng-show="views.general.recent.show">
           <h3>
             {{ 'Recently Viewed Profiles' | uppercase }}
             <a ng-click="getRecent()"><span class="fa fa-refresh fa-steam-href fa-lg"></span></a>
             <!-- <a class="btn btn-steam" ng-click="getRecent()">Refresh Recent <span class="fa fa-refresh fa-steam-href fa-lg"></span></a> -->
           </h3>
-        </div>
-        <div class="col-xs-12">
-            <steam-user-media-badge class="col-sm-4" ng-model="p" small col="1" ng-repeat="p in recent"></steam-user-media-badge>
+          <div class="row">
+              <steam-user-media-badge class="col-sm-4" ng-model="p" small col="1" ng-repeat="p in recent"></steam-user-media-badge>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-xs-4">
-          <label>PlayerID</label>
-          <div class="input-group">
-            <input class="form-control form-control-steam" type="text"
-              ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"/>
-            <span class="input-group-btn">
-              <a class="btn btn-steam"><span class="fa fa-search"></span></a>
-            </span>
+        <div class="col-xs-12">
+            <custom-button-group ng-model="views.search"></custom-button-group>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
+              <label>Steam Name</label>
+              <div class="input-group">
+                <input class="form-control form-control-steam" type="text"
+                  ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
+                <span class="input-group-btn">
+                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+                </span>
+              </div>
+            </div>
+            <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
+              <label>PlayerID</label>
+              <div class="input-group">
+                <input class="form-control form-control-steam" type="text"
+                  ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"/>
+                <span class="input-group-btn">
+                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
