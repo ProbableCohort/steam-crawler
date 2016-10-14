@@ -10,7 +10,9 @@
         replace: true,
         require: 'ngModel',
         templateUrl: 'javascripts/d/templates/customButtonGroup.html',
-        view : '=ngModel'
+        scope : {
+          view : '=ngModel'
+        }
       }
 
       return directive;

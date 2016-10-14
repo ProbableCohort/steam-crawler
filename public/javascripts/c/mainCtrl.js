@@ -37,14 +37,16 @@
       });
     }
 
-    $scope.view = {
-      profile : {
-        show : false,
-        name : 'View Profile'
-      },
-      friends : {
-        show : true,
-        name : 'View Friends'
+    $scope.views = {
+      result : {
+        profile : {
+          show : false,
+          name : 'View Profile'
+        },
+        friends : {
+          show : true,
+          name : 'View Friends'
+        }
       }
     }
 

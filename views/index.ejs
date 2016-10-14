@@ -4,7 +4,7 @@
 
     <base href="/">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewsport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-filter/dist/angular-filter.min.js"></script>
@@ -60,15 +60,15 @@
         <div class="col-xs-12" ng-show="ready">
           <h3>Player Found</h3>
           <steam-user-media-badge ng-model="player" col="2"></steam-user-media-badge>
-          <custom-button-group ng-model="view"></custom-button-group>
+          <custom-button-group ng-model="views.result"></custom-button-group>
         </div>
-        <div class="col-xs-12" ng-show="ready && view.profile.show">
+        <div class="col-xs-12" ng-show="ready && views.result.profile.show">
           <h3>Profile</h3>
           <div class="" ng-repeat="h in player.personahistory | unique:'avatarfull'">
               <img ng-src="{{h.avatarfull}}" />
           </div>
         </div>
-        <div class="col-xs-12" ng-show="ready && view.friends.show">
+        <div class="col-xs-12" ng-show="ready && views.result.friends.show">
           <h3>Friends</h3>
           <div>
             This player has {{players.friends.length || 0}} friends
