@@ -37,46 +37,6 @@
       });
     }
 
-    $scope.determinePersonaState = function(entity) {
-      if (!entity)
-        return;
-      var state;
-      var stateId = entity.personastate;
-      switch(stateId) {
-        case 0:
-          state = "Offline";
-          entity.status = 2;
-          break;
-        case 1:
-          state = "Online";
-          entity.status = 0;
-          break;
-        case 2:
-          state = "Busy";
-          entity.status = 2;
-          break;
-        case 3:
-          state = "Away";
-          entity.status = 1;
-          break;
-        case 4:
-          state = "Snooze";
-          entity.status = 2;
-          break;
-        case 5:
-          state = "Looking To Trade";
-          entity.status = 1;
-          break;
-        case 6:
-          state = "Looking To Play";
-          entity.status = 1;
-          break;
-        default:
-          break;
-      }
-      return state;
-    }
-
     $scope.findPlayerInfo(76561197972363720);
   }
 

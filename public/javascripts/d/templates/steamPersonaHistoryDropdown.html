@@ -7,8 +7,8 @@
     <li class="personahistory-list-item" ng-repeat="persona in personahistory | unique:'personaname' | limitTo:10">
       {{persona.personaname}}
     </li>
-    <li ng-show="player.personahistory.length > 10">
-      ...and {{player.personahistory.length - 10}} other names.
+    <li ng-show="personahistory.length > 10">
+      ...and {{personahistory.length - 10}} other names.
     </li>
   </ul>
 </span>

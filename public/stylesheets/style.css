@@ -27,6 +27,14 @@ a:hover {
 .btn.btn-steam {
   color: #67c1f5 !important;
   background: rgba(103, 193, 245, 0.2);
+  border-color: rgba(43, 40, 40, 0.7);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.form-control-steam {
+  color: #67c1f5 !important;
+  background-color: rgba(103, 193, 245, 0.2);
+  border-color: rgba(103, 193, 245, 0.2);
 }
 
 .dropdown-menu.dropdown-menu-steam {

@@ -22,6 +22,20 @@ function findProfileBySteamId(id, res) {
       createdAt : -1
     }
   }
+  var historyGroup = {
+    $group :{
+      _id : "$steamid",
+      profile : { $first : "$$ROOT" },
+      personahistory : { $addToSet : {
+        personaname : "$personaname",
+        avatarfull : "$avatarfull",
+        personastate : "$personastate"
+      }},
+      activityhistory : { $addToSet : {
+        personastate : "$personastate"
+      }}
+    }
+  }
   var group = {
     $group: {
       _id : "$steamid",
@@ -29,8 +43,14 @@ function findProfileBySteamId(id, res) {
       personahistory : { $push : "$$ROOT" }
     }
   }
+  var project = {
+    $project: {
+      $_id : "$_id.steamid",
+      personahistory : { $addToSet : "$_id" }
+    }
+  }
   SteamUser
-    .aggregate([match, sort, group])
+    .aggregate([match, sort, historyGroup])
     .exec(function (err, user) {
       if (err)
         console.log(err.stack);
@@ -52,10 +72,17 @@ function findProfilesBySteamIds(ids, res) {
     }
   }
   var group = {
-    $group: {
+    $group :{
       _id : "$steamid",
       profile : { $first : "$$ROOT" },
-      personahistory : { $push : "$$ROOT" }
+      personahistory : { $addToSet : {
+        personaname : "$personaname",
+        avatarfull : "$avatarfull",
+        personastate : "$personastate"
+      }},
+      activityhistory : { $addToSet : {
+        personastate : "$personastate"
+      }}
     }
   }
   SteamUser
