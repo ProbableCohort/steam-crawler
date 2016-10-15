@@ -46,7 +46,7 @@ api.get('/user/', function(req, res) {
 })
 
 api.get('/personas', function(req, res) {
-  CrawlerApiService.findProfilesWithPersonaHistory(res);
+  CrawlerApiService.findProfilesWithPersonaHistory(req.query.count, res);
 })
 
 api.post('/user/', function(req, res) {

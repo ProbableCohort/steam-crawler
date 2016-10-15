@@ -26,12 +26,15 @@ var group = {
     profile : { $last : "$$ROOT" },
     personahistory : { $addToSet : {
       personaname : "$personaname",
-      avatarfull : "$avatarfull",
-      personastate : "$personastate"
+      avatarfull : "$avatarfull"
     }},
-    activityhistory : { $addToSet : {
-      personastate : "$personastate"
-    }},
+    activityhistory : {
+      $addToSet : {
+        personaname : "$personaname",
+        avatarfull : "$avatarfull",
+        personastate : "$personastate"
+      }
+    },
     friendsList : { $addToSet : "$friendsList" }
   }
 }
@@ -118,6 +121,7 @@ function findProfilesBySteamIds(ids, res) {
       "_id" : "$_id",
       "profile" : "$profile",
       "personahistory" : "$personahistory",
+      "activityhistory" : "$activityhistory",
       "friendsList" : "$friendsList"
     }
   }
@@ -195,12 +199,39 @@ function countAllProfiles(res) {
     })
 }
 
-function findProfilesWithPersonaHistory(res) {
+function findProfilesWithPersonaHistory(count, res) {
+  count = parseInt(count);
+  var sort = {
+    $sort: {
+      "profile.createdAt" : -1
+    }
+  }
+  var project = {
+    $project: {
+      "profile" : "$profile",
+      "personahistory" : "$personahistory",
+      "activityhistory" : "$activityhistory",
+      "friendsList" : "$friendsList",
+      "personahistorysize": { $size: "$personahistory" }
+    }
+  }
+  var sortProject = {
+    $sort: {
+      "personahistorysize" : -1
+    }
+  }
+  var limit = {
+    $limit : count
+  }
   SteamUser
-    .find({ $where: "this.personahistory.length > 0" })
-    .exec(function(err, profiles) {
+    .aggregate([unwind, group, sort, project, sortProject, limit])
+    .exec(function(err, users) {
       if (err)
         console.log(err.stack);
+      var profiles = [];
+      for (var i in users) {
+        profiles.push(transformAggregateResponse(users[i]));
+      }
       res.send(profiles);
     })
 }
@@ -229,6 +260,7 @@ function transformAggregateResponse(response) {
   var profile = response.profile;
   profile._id = response._id;
   profile.personahistory = response.personahistory;
+  profile.activityhistory = response.activityhistory;
   response.friendsList ? profile.friendsList = response.friendsList : null;
   return profile;
 }
