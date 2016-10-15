@@ -15,6 +15,7 @@
         </strong>
         <span ng-if="steamUser.status == 2"> - Last online @ {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
       </div>
+      <span ng-if="steamUser.playerlevel">Level {{steamUser.playerlevel}}</span>
       <div class="text-muted">
         {{steamUser.friendsList.length}} Friends
       </div>

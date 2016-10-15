@@ -44,6 +44,7 @@
           if (!friends.length) {
             $scope.player = CrawlerApiService.user().save(player);
             $scope.updateProfileCount();
+            $scope.getPlayerLevel($scope.player);
             $scope.searchResults = null;
             $scope.ready = true;
             return;
@@ -53,18 +54,29 @@
             player.friendsList.push(friend.steamid);
           })
           player.friends = SteamApiService.GetPlayerSummaries(player.friendsList).query(function() {
-            CrawlerApiService.user().saveAll(player.friends, function() {
-              $scope.player = CrawlerApiService.user().save(player, function() {
-                $scope.player.friends = CrawlerApiService.user().query({ ids : player.friendsList.join(',') })
-                $scope.updateProfileCount();
+            $scope.getPlayerLevel(player, function(player) {
+              CrawlerApiService.user().saveAll(player.friends, function() {
+                $scope.player = CrawlerApiService.user().save(player, function() {
+                  $scope.player.friends = CrawlerApiService.user().query({ ids : player.friendsList.join(',') })
+                  $scope.updateProfileCount();
+                });
+                $scope.searchResults = null;
+                $scope.ready = true;
               });
-              $scope.searchResults = null;
-              $scope.ready = true;
             });
           });
         });
 
       });
+    }
+
+    $scope.getPlayerLevel = function(player, cb) {
+      if (player.level) { cb(player);return; }
+      SteamApiService.GetSteamLevel(player.steamid).get(function(level) {
+        player.playerlevel = level.player_level;
+        if (typeof cb === 'function')
+          cb(player);
+      })
     }
 
     $scope.views = {

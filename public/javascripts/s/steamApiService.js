@@ -11,7 +11,8 @@
     var service = {
       GetSchemaForGame : GetSchemaForGame,
       GetPlayerSummaries : GetPlayerSummaries,
-      GetFriendList : GetFriendList
+      GetFriendList : GetFriendList,
+      GetSteamLevel : GetSteamLevel
     }
 
     return service;
@@ -58,6 +59,20 @@
       }
       return $resource(URI, PARAMS, ACTIONS);
     }
+
+    function GetSteamLevel(id) {
+      var URI = BASE_URI + '/player/:id/rank';
+      var PARAMS = {id:id};
+      var transformResponse = function(d){
+        d = JSON.parse(d);
+        return d.response;
+      }
+      var ACTIONS = {
+        'get' : {transformResponse:transformResponse}
+      }
+      return $resource(URI, PARAMS, ACTIONS);
+    }
+
   }
 
 })(angular);

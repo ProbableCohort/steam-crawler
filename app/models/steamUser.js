@@ -21,6 +21,7 @@ var steamUserSchema = mongoose.Schema({
   "profileurl": String,
   "realname": String,
   "steamid": String,
+  "playerlevel": Number,
   "timecreated": Number,
   "friendsList": [String]
 }, {
