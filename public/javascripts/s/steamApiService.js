@@ -43,12 +43,6 @@
         'query' : {transformResponse:transformResponse, isArray:true}
       }
       return $resource(URI, PARAMS, ACTIONS);
-      // if (id instanceof Array) {
-      //   console.log('Array of ids')
-      //   return $resource(URI, PARAMS).query().$promise;
-      // } else {
-      //   return $resource(URI, PARAMS).get().$promise;
-      // }
     }
 
     function GetFriendList(id) {

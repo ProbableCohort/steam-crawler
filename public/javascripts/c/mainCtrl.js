@@ -6,6 +6,7 @@
 
   function MainCtrl($scope, $q, SteamApiService, CrawlerApiService) {
 
+    $scope.forms = {};
     $scope.history = [];
 
     $scope.getRecent = function() {
@@ -15,18 +16,22 @@
     }
 
     $scope.findPlayerByName = function(name) {
+      if (!name || !name.length) { return; }
       CrawlerApiService.user().query({ personaname : name}, function(results) {
         $scope.searchResults = results;
-        console.log(results);
       })
     }
 
     $scope.findPlayerInfo = function(id) {
+      if (!id) { return; }
       $scope.ready = false;
-      if ($scope.player && $scope.player.steamid)
-        $scope.history.push($scope.player);
       SteamApiService.GetPlayerSummaries(id).get(function(player) {
-
+        if (!player.steamid) {
+          $scope.searchResults = null;
+          return;
+        }
+        if ($scope.player && $scope.player.steamid)
+          $scope.history.push($scope.player);
         SteamApiService.GetFriendList(id).query(function(friends) {
           if (!friends.length) {
             $scope.player = CrawlerApiService.user().save(player);

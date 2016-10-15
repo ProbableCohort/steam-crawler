@@ -55,37 +55,47 @@
         <br />
         <br />
         <div>
-          <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
-            <label>Steam Name</label>
-            <div class="input-group">
-              <input class="form-control form-control-steam" type="text"
-                ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
-              <span class="input-group-btn">
-                <a class="btn btn-steam"><span class="fa fa-search"></span></a>
-              </span>
+          <form name="forms.steamSearch">
+            <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
+              <label>Steam Name</label>
+              <div class="input-group">
+                <input class="form-control form-control-steam" type="text"
+                  ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
+                <span class="input-group-btn">
+                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+                </span>
+              </div>
             </div>
-          </div>
-          <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
-            <label>PlayerID</label>
-            <div class="input-group">
-              <input class="form-control form-control-steam" type="text"
-                ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"/>
-              <span class="input-group-btn">
-                <a class="btn btn-steam"><span class="fa fa-search"></span></a>
-              </span>
+            <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
+              <label>PlayerID</label>
+              <div class="input-group">
+                <input class="form-control form-control-steam" type="text" name="steamid"
+                  ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"
+                  ng-minlength="17" ng-maxlength="17" />
+                <span class="input-group-btn">
+                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+                </span>
+              </div>
+              <div class="help-block" ng-show="forms.steamSearch.steamid.$error.maxlength || forms.steamSearch.steamid.$error.minlength">
+                PlayerID must be exactly 17 characters long.
+              </div>
             </div>
-          </div>
+
+          </form>
         </div>
-        <div class="col-xs-12" ng-show="searchResults.length">
-          {{searchResults.length}} results found.
+        <div class="col-xs-12" ng-show="searchResults && player.personaname.length">
+          {{searchResults.length}} results found for a Steam Name like {{player.personaname}}
         </div>
         <div class="col-xs-6 col-sm-3" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults | unique:'personaname' | limitTo:12">
           <img ng-src="{{player.avatar}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
           <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
         </div>
       </div>
-      <div class="col-xs-12" ng-show="!ready && !player">
+      <div class="col-xs-12" ng-show="!searchResults && !player._id">
         Search for a player.
+      </div>
+      <div class="col-xs-12" ng-show="player.steamid && !player._id">
+        No player found for PlayerID {{player.steamid}}
       </div>
       <div class="row" ng-show="history.length">
         <div class="col-xs-12">
@@ -98,11 +108,11 @@
       </div>
       <br />
       <hr />
-      <div class="row">
-        <div class="col-xs-12" ng-show="!ready && player">
+      <div class="row" ng-show="player && player._id">
+        <div class="col-xs-12" ng-show="!ready">
           Loading Player Data
         </div>
-        <div class="col-xs-12" ng-show="ready && player">
+        <div class="col-xs-12" ng-show="ready">
           <h3>Player Found</h3>
           <steam-user-media-badge ng-model="player" col="2"></steam-user-media-badge>
           <custom-button-group ng-model="views.result"></custom-button-group>
