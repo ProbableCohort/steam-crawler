@@ -17,4 +17,18 @@ api.get('/game/:id', function(req, res) {
     });
 });
 
+api.get('/game/:id/stats', function(req, res) {
+    // Calculate the Steam API URL we want to use
+    var VERSION = 'v1/'
+    var url = BASE_URI + 'GetGlobalStatsForGame/' + VERSION;
+    var query = { key: KEYS.STEAM_API_KEY, appid: req.params.id, count: req.query.count, name: req.query.name }
+    console.log(query.count, query.name)
+    var options = { url:url, qs:query }
+    console.log(options.qs);
+    request.get(options, function(error, steamHttpResponse, steamHttpBody) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(steamHttpBody);
+    });
+});
+
 module.exports = api;

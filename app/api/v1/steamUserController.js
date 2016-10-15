@@ -53,4 +53,14 @@ api.get('/:id/friends', function(req, res) {
     });
 });
 
+api.get('/:id/personahistory', function(req, res) {
+  var url = 'http://steamcommunity.com/profiles/';
+  var action = '/ajaxaliases/';
+  url = url + req.params.id + action;
+  request.get(url, function(error, steamHttpResponse, steamHttpBody) {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(steamHttpBody);
+  });
+})
+
 module.exports = api;
