@@ -34,6 +34,9 @@
         <h1><span class="fa fa-steam fa-lg"></span> {{ 'Steam Crawler' | uppercase }}</h1>
       </div>
       <div class="row">
+        <div class="col-xs-12 inline-header steam-stat">
+          <h1>{{stats.profileCount}}</h1><h3>Profiles recorded</h3>
+        </div>
         <div class="col-xs-12">
             <custom-button-group ng-model="views.general"></custom-button-group>
         </div>
@@ -91,11 +94,13 @@
           <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
         </div>
       </div>
-      <div class="col-xs-12" ng-show="!searchResults && !player._id">
-        Search for a player.
-      </div>
-      <div class="col-xs-12" ng-show="player.steamid && !player._id">
-        No player found for PlayerID {{player.steamid}}
+      <div class="row">
+        <div class="col-xs-12" ng-show="!searchResults && !player._id">
+          Search for a player.
+        </div>
+        <div class="col-xs-12" ng-show="player.steamid && !player._id">
+          No player found for PlayerID {{player.steamid}}
+        </div>
       </div>
       <div class="row" ng-show="history.length">
         <div class="col-xs-12">

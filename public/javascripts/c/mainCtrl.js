@@ -9,6 +9,14 @@
     $scope.forms = {};
     $scope.history = [];
 
+    $scope.stats = {};
+
+    $scope.updateProfileCount = function() {
+      CrawlerApiService.user().count(function(count) {
+        $scope.stats.profileCount = count.profileCount;
+      });
+    }
+
     $scope.getRecent = function() {
       CrawlerApiService.user().last({ count : 9 }, function(data) {
         $scope.recent = data;
@@ -35,6 +43,7 @@
         SteamApiService.GetFriendList(id).query(function(friends) {
           if (!friends.length) {
             $scope.player = CrawlerApiService.user().save(player);
+            $scope.updateProfileCount();
             $scope.searchResults = null;
             $scope.ready = true;
             return;
@@ -47,6 +56,7 @@
             CrawlerApiService.user().saveAll(player.friends, function() {
               $scope.player = CrawlerApiService.user().save(player, function() {
                 $scope.player.friends = CrawlerApiService.user().query({ ids : player.friendsList.join(',') })
+                $scope.updateProfileCount();
               });
               $scope.searchResults = null;
               $scope.ready = true;
@@ -70,7 +80,7 @@
       },
       general : {
         recent : {
-          show : true,
+          show : false,
           name : 'View Recent Profiles',
           onShow : $scope.getRecent
         }
@@ -89,6 +99,7 @@
 
     $scope.init = function() {
       $scope.getRecent();
+      $scope.updateProfileCount();
     }
 
     $scope.init();

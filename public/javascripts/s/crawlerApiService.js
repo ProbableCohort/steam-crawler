@@ -35,6 +35,14 @@
           method : 'GET',
           params : {
             action : 'all'
+          },
+          isArray : true
+        },
+        'count' : {
+          method : 'GET',
+          params : {
+            action : 'all',
+            id : 'count'
           }
         }
       }

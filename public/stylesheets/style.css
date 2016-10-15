@@ -19,6 +19,10 @@ a:hover {
   color: #656f77;
 }
 
+.inline-header * {
+  display: inline-block;
+}
+
 .col-xs-12 {
   margin-bottom: 10px;
 }
@@ -87,4 +91,9 @@ a .fa-steam-href:hover {
 .steam-status-online {
   border: 3px solid #3c763d;
   border-radius: 3px;
+}
+
+.steam-stat h1 {
+  color: #ffc14d;
+  padding-right: 3px;
 }
