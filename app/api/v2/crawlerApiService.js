@@ -137,6 +137,11 @@ function findProfilesBySteamIds(ids, res) {
 
 function findLastProfilesByCount(count, res) {
   count = parseInt(count);
+  var match = {
+    $match: {
+      "friendsList" : { $ne: [] }
+    }
+  }
   var sort = {
     $sort: {
       "profile.createdAt" : -1
@@ -146,7 +151,7 @@ function findLastProfilesByCount(count, res) {
     $limit : count
   }
   SteamUser
-    .aggregate([unwind, group, sort, limit])
+    .aggregate([match, unwind, group, sort, limit])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
