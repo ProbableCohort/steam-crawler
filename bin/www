@@ -7,12 +7,13 @@
 var app = require('../app');
 var debug = require('debug')('steam-crawler:server');
 var http = require('http');
+var CONFIG = require('../private/config.js');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.STEAM_CRAWLER_PORT || '3000');
 app.set('port', port);
 
 /**
