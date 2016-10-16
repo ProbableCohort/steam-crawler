@@ -24,6 +24,7 @@ var group = {
   $group :{
     _id : "$steamid",
     profile : { $last : "$$ROOT" },
+    playerlevel : { $max : "$playerlevel" },
     personahistory : { $addToSet : {
       personaname : "$personaname",
       avatarfull : "$avatarfull"
@@ -47,6 +48,7 @@ var project = {
     "personahistory" : "$personahistory",
     "activityhistory" : "$activityhistory",
     "friendsList" : "$friendsList",
+    "playerlevel" : "$playerlevel",
     "personahistorysize": { $size: "$personahistory" },
     "friendssize" : { $size: "$friendsList" },
     "timesviewed" : { $sum : "$viewed" }
@@ -155,7 +157,6 @@ function findProfilesBySteamIds(ids, res) {
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
-      console.log(users ? users.length : null);
       var profiles = [];
       for (var i in users) {
         profiles.push(transformAggregateResponse(users[i]));
@@ -194,13 +195,9 @@ function findLastProfilesByCount(count, res) {
 }
 
 function findAllProfiles(req, res) {
-  var sort = {
-    $sort: {
-      "profile.createdAt" : -1
-    }
-  }
-  var match = { $match: {} };
-  var limit = { $limit: 10 };
+  var sort = { $sort: { "profile.createdAt" : -1 } }
+  var match = { $match: {} }
+  var limit = { $limit: 10 }
   if (req.query.sortBy) {
     var sortParam = req.query.sortBy;
     switch (req.query.sortBy) {
@@ -216,9 +213,10 @@ function findAllProfiles(req, res) {
         break;
     }
     sort = {
-      $sort: {}
+      $sort : {}
     }
     sort.$sort[sortParam] = -1;
+    sort.$sort['profile.createdAt'] = -1;
   }
   if (req.query.count) {
     var count = parseInt(req.query.count);
@@ -226,24 +224,9 @@ function findAllProfiles(req, res) {
       $limit: count
     }
   }
-  if (req.query.all) {
-    limit = {
-      $limit: {}
-    }
-  }
-  var project = {
-    $project: {
-      "profile" : "$profile",
-      "personahistory" : "$personahistory",
-      "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList",
-      "friendssize" : { $size: "$friendsList" },
-      "personahistorysize": { $size: "$personahistory" },
-      "timesviewed" : { $size : "$views" }
-    }
-  }
 
-  var pipeline = [match, unwind, group, project, sort, limit];
+  var pipeline = [match, unwind, group, project, sort];
+  if (!req.query.all) { pipeline.push(limit); }
   SteamUser
     .aggregate(pipeline)
     .exec(function (err, users) {
@@ -335,6 +318,7 @@ function transformAggregateResponse(response) {
   profile.personahistory = response.personahistory;
   profile.activityhistory = response.activityhistory;
   profile.timesviewed = response.timesviewed;
+  profile.playerlevel = response.playerlevel;
   profile.friendsList = response.friendsList ? response.friendsList : null;
   return profile;
 }
