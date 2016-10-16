@@ -121,7 +121,12 @@ a .fa-steam-href:hover {
 }
 
 .steam-user-media-badge {
-  min-height: 70px;
+  min-height: 72px;
+}
+
+.steam-user-media-badge .media-object {
+  min-height: 72px;
+  min-width: 72px;
 }
 
 .steam-user-media-badge .media-heading span, .steam-user-media-badge .media-heading a:not(.btn) {
@@ -130,6 +135,10 @@ a .fa-steam-href:hover {
 .steam-status-online {
   border: 3px solid #3c763d;
   border-radius: 3px;
+}
+
+.media-object:not(.steam-status-online) {
+  border: 3px solid rgba(0,0,0,0);
 }
 
 .steam-stat h1 {

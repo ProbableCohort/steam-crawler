@@ -35,7 +35,8 @@ var group = {
         personastate : "$personastate"
       }
     },
-    friendsList : { $addToSet : "$friendsList" }
+    friendsList : { $addToSet : "$friendsList" },
+    views : { $addToSet : "$viewedAt" }
   }
 }
 
@@ -48,6 +49,16 @@ function findProfileBySteamId(id, res) {
   var sort = {
     $sort: {
       "profile.createdAt" : -1
+    }
+  }
+  var project = {
+    $project : {
+      "_id" : "$_id",
+      "profile" : "$profile",
+      "personahistory" : "$personahistory",
+      "activityhistory" : "$activityhistory",
+      "friendsList" : "$friendsList",
+      timesviewed : { $sum : "$viewed" }
     }
   }
   SteamUser
@@ -143,7 +154,8 @@ function findLastProfilesByCount(count, res) {
   count = parseInt(count);
   var match = {
     $match: {
-      "friendsList" : { $ne: [] }
+      // "friendsList" : { $ne: [] }
+      "viewedAt" : { $exists : true }
     }
   }
   var sort = {
@@ -237,6 +249,7 @@ function findProfilesWithPersonaHistory(count, res) {
 }
 
 function persistProfile(profile, res) {
+  profile.viewedAt = new Date();
   SteamUser
     .create(profile, function (err, profile) {
       if (err)
@@ -261,6 +274,7 @@ function transformAggregateResponse(response) {
   profile._id = response._id;
   profile.personahistory = response.personahistory;
   profile.activityhistory = response.activityhistory;
+  profile.timesviewed = response.views.length;
   response.friendsList ? profile.friendsList = response.friendsList : null;
   return profile;
 }
