@@ -5,6 +5,20 @@ body {
   background: #1b2838;
 }
 
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+}
+
+footer {
+  font-size: 10px !important;
+}
+
+footer .popover-content {
+  font-size: 12px !important;
+}
+
 hr {
   border-top: 1px solid #67c1f5 !important;
 }
@@ -19,8 +33,15 @@ a:hover {
   color: #656f77;
 }
 
+.inline-header {
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
 .inline-header * {
   display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .col-xs-12 {
@@ -34,6 +55,10 @@ a:hover {
 .jumbotron.jumbotron-slim {
   padding-top: 15px;
   padding-bottom: 20px;
+}
+
+.jumbotron .media {
+  margin-bottom: 0px;
 }
 
 .media {
@@ -80,12 +105,26 @@ a .fa-steam-href:hover {
   padding: 5px;
 }
 
+.popover-steam {
+  color: #67c1f5 !important;
+  background: #2e3d50;
+  box-shadow: 0 6px 24px rgba(0,0,0,.375);
+}
+
+.popover-steam .arrow::after {
+  border-top-color: #2e3d50 !important;
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
 .personahistory-list .personahistory-list-item {
   margin-left: 10px;
 }
 
 .steam-user-media-badge {
   min-height: 70px;
+}
+
+.steam-user-media-badge .media-heading span, .steam-user-media-badge .media-heading a:not(.btn) {
 }
 
 .steam-status-online {

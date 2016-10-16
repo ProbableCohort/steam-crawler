@@ -4,7 +4,7 @@
 
     <base href="/">
 
-    <meta name="viewsport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-filter/dist/angular-filter.min.js"></script>
@@ -16,6 +16,7 @@
     <script type="text/javascript" src="/javascripts/s/mainService.js"></script>
     <script type="text/javascript" src="/javascripts/s/steamApiService.js"></script>
     <script type="text/javascript" src="/javascripts/s/crawlerApiService.js"></script>
+    <script type="text/javascript" src="/javascripts/s/serverApiService.js"></script>
     <script type="text/javascript" src="/javascripts/c/mainCtrl.js"></script>
 
     <script type="text/javascript" src="/javascripts/d/steamPersonaHistoryDropdown.js"></script>
@@ -28,10 +29,17 @@
     <link href="https://fonts.googleapis.com/css?family=Duru+Sans" rel="stylesheet">
 
   </head>
-  <body ng-app="steamCrawlerApp" ng-cloak>
-    <div class="container" ng-controller="mainCtrl">
+  <body ng-app="steamCrawlerApp" ng-controller="mainCtrl" ng-cloak>
+    <div class="container">
       <div class="jumbotron jumbotron-slim">
-        <h1><span class="fa fa-steam fa-lg"></span> {{ 'Steam Crawler' | uppercase }}</h1>
+        <div class="media">
+          <div class="media-left">
+            <h1><span class="fa fa-steam fa-lg media-object"></span></h1>
+          </div>
+          <div class="media-body">
+            <h1>{{ 'Steam Crawler' | uppercase }}</h1>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-xs-12 inline-header steam-stat">
@@ -59,7 +67,7 @@
         <br />
         <div>
           <form name="forms.steamSearch">
-            <div class="form-group col-xs-4" ng-show="views.search.steamName.show">
+            <div class="form-group col-sm-4" ng-show="views.search.steamName.show">
               <label>Steam Name</label>
               <div class="input-group">
                 <input class="form-control form-control-steam" type="text"
@@ -69,7 +77,7 @@
                 </span>
               </div>
             </div>
-            <div class="form-group col-xs-4" ng-show="views.search.playerId.show">
+            <div class="form-group col-sm-4" ng-show="views.search.playerId.show">
               <label>PlayerID</label>
               <div class="input-group">
                 <input class="form-control form-control-steam" type="text" name="steamid"
@@ -140,5 +148,13 @@
         </div>
       </div>
     </div>
+    <footer>
+      <div class="text-center text-muted">
+        <span class="fa fa-copyright"></span> 2016 Node Mules - v{{appInfo.version}}
+      </div>
+      <div class="text-center text-muted">
+        <a uib-popover="{{appInfo.legalText}}" popover-class="popover-steam">Legal</a>
+      </div>
+    </footer>
   </body>
 </html>

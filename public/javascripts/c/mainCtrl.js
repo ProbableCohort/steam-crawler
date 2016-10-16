@@ -2,10 +2,11 @@
 (function(angular) {
   angular.module('crawlerControllers').controller('mainCtrl', MainCtrl);
 
-  MainCtrl.$inject = ['$scope', '$q', 'SteamApiService', 'CrawlerApiService'];
+  MainCtrl.$inject = ['$scope', '$q', 'SteamApiService', 'CrawlerApiService', 'ServerApiService'];
 
-  function MainCtrl($scope, $q, SteamApiService, CrawlerApiService) {
+  function MainCtrl($scope, $q, SteamApiService, CrawlerApiService, ServerApiService) {
 
+    $scope.appInfo = {};
     $scope.forms = {};
     $scope.history = [];
 
@@ -109,7 +110,20 @@
       }
     }
 
+    $scope.getAppInfo = function() {
+      var legalText = [
+        "All of this stuff is from Steam through the Web API. ",
+        "By using this service you agree not to do anything bad to our stuff or theirs, and accept the data 'as-is'. ",
+        "Don't be a jackass."
+      ]
+      $scope.appInfo.legalText = legalText.join('');
+      ServerApiService.version().get(function(d) {
+        $scope.appInfo.version = d.version;
+      });
+    }
+
     $scope.init = function() {
+      $scope.getAppInfo();
       $scope.getRecent();
       $scope.updateProfileCount();
     }
