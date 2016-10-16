@@ -145,3 +145,40 @@ a .fa-steam-href:hover {
   color: #ffc14d;
   padding-right: 3px;
 }
+
+.steam-level-green {
+  color: #3ccc3e;
+}
+
+.steam-level-yellow {
+  color: #ffd800;
+}
+
+.steam-level-red {
+  color: #d43333;
+}
+
+.steam-level-purple {
+  color: #a534d0;
+}
+
+.steam-level-orange {
+  color: #ff8c0f;
+}
+
+.steam-level-epic {
+
+}
+
+.steam-level-legendary {
+
+}
+
+.player-profile {
+
+}
+
+.player-profile .personahistory-avatar img {
+  height: 48px;
+  width: 48px;
+}

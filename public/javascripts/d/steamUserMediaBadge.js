@@ -78,6 +78,38 @@
           return state;
         }
 
+        $scope.getLevelColor = function(level) {
+          var selector = '';
+          switch(true) {
+            case (level < 10):
+              break;
+            case (level < 20):
+              selector = 'steam-level-green';
+              break;
+            case (level < 30):
+              selector = 'steam-level-yellow';
+              break;
+            case (level < 40):
+              selector = 'steam-level-red'
+              break;
+            case (level < 50):
+              selector = 'steam-level-purple'
+              break;
+            case (level < 100):
+              selector = 'steam-level-orange';
+              break;
+            case (level < 500):
+              selector = 'steam-level-epic';
+              break;
+            case (level >= 500):
+              selector = 'steam-level-legendary';
+              break;
+            default:
+              break;
+          }
+          return selector;
+        }
+
       }
   }
 

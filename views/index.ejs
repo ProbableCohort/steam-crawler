@@ -130,14 +130,18 @@
           <steam-user-media-badge ng-model="player" col="2"></steam-user-media-badge>
           <custom-button-group ng-model="views.result"></custom-button-group>
         </div>
-        <div class="col-xs-12" ng-show="ready && views.result.profile.show">
+        <div class="col-xs-12 player-profile" ng-show="ready && views.result.profile.show">
           <h3>Profile</h3>
           <div>
             This player has been viewed {{player.timesviewed}} times.
           </div>
-          <div class="personahistory-avatars" ng-repeat="h in player.personahistory | unique:'avatarfull'">
-              <img ng-src="{{h.avatarfull}}" />
+          <div>
+            <h4>Previous Avatars</h4>
+            <div class="personahistory-avatar" ng-repeat="h in player.personahistory | unique:'avatarfull'">
+                <img ng-src="{{h.avatarfull}}" />
+            </div>
           </div>
+
         </div>
         <div class="col-xs-12" ng-show="ready && views.result.friends.show">
           <h3>Friends</h3>
