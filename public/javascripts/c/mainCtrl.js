@@ -148,7 +148,6 @@
 
     $scope.init = function() {
       $scope.getAppInfo();
-      $scope.getRecent();
       $scope.updateProfileCount();
     }
 
