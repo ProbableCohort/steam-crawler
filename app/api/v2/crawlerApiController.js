@@ -17,7 +17,7 @@ api.use(function(req, res, next) {
 });
 
 api.get('/user/all/', function(req, res) {
-  CrawlerApiService.findAllProfiles(res);
+  CrawlerApiService.findAllProfiles(req, res);
 })
 
 api.get('/user/all/count', function(req, res) {

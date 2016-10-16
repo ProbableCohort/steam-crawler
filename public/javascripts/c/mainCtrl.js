@@ -18,10 +18,10 @@
       });
     }
 
-    $scope.getRecent = function() {
-      CrawlerApiService.user().last({ count : 9 }, function(data) {
-        $scope.recent = data;
-      });
+    $scope.getProfiles = function(param, count) {
+      CrawlerApiService.user().all({ sortBy: param, count: count}, function(data) {
+        $scope.profiles = data;
+      })
     }
 
     $scope.findPlayerByName = function(name) {
@@ -94,9 +94,32 @@
       },
       general : {
         recent : {
+          radio : 'recent',
           show : false,
-          name : 'View Recent Profiles',
-          onShow : $scope.getRecent
+          name : 'Recently Updated',
+          onShow : $scope.getProfiles,
+          value : 'viewedAt'
+        },
+        mostViewed : {
+          radio : 'mostViewed',
+          show : false,
+          name : 'Most Viewed',
+          onShow : $scope.getProfiles,
+          value : 'timesviewed'
+        },
+        friends : {
+          radio : 'friends',
+          show : false,
+          name : 'Most Friends',
+          onShow : $scope.getProfiles,
+          value : 'friends'
+        },
+        level : {
+          radio : 'level',
+          show : false,
+          name : 'Highest Level',
+          onShow : $scope.getProfiles,
+          value : 'playerlevel'
         }
       },
       search : {

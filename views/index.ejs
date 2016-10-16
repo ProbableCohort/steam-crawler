@@ -46,16 +46,15 @@
           <h1>{{stats.profileCount}}</h1><h3>Profiles recorded</h3>
         </div>
         <div class="col-xs-12">
-            <custom-button-group ng-model="views.general"></custom-button-group>
+            <custom-button-group radio ng-model="views.general"></custom-button-group>
         </div>
-        <div class="col-xs-12" ng-show="views.general.recent.show">
+        <div class="col-xs-12" ng-repeat="view in views.general" ng-show="view.show">
           <h3>
-            {{ 'Recently Viewed Profiles' | uppercase }}
-            <a ng-click="getRecent()"><span class="fa fa-refresh fa-steam-href fa-lg"></span></a>
-            <!-- <a class="btn btn-steam" ng-click="getRecent()">Refresh Recent <span class="fa fa-refresh fa-steam-href fa-lg"></span></a> -->
+            {{ view.name | uppercase }}
+            <a ng-click="view.onShow(view.value, view.value2)"><span class="fa fa-refresh fa-steam-href fa-lg"></span></a>
           </h3>
           <div class="row">
-              <steam-user-media-badge class="col-xs-12 col-sm-6 col-md-4" ng-model="p" small col="1" ng-repeat="p in recent"></steam-user-media-badge>
+              <steam-user-media-badge class="col-xs-12 col-sm-6 col-md-4" ng-model="p" small col="1" ng-repeat="p in profiles | limitTo:9"></steam-user-media-badge>
           </div>
         </div>
       </div>
@@ -121,7 +120,7 @@
       </div>
       <br />
       <hr />
-      <div class="row" ng-show="player && player._id">
+      <div class="row" ng-show="player && player._id" id="displayedProfile">
         <div class="col-xs-12" ng-show="!ready">
           Loading Player Data
         </div>

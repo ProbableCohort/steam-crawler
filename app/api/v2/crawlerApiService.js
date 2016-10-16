@@ -40,6 +40,19 @@ var group = {
   }
 }
 
+var project = {
+  $project : {
+    "_id" : "$_id",
+    "profile" : "$profile",
+    "personahistory" : "$personahistory",
+    "activityhistory" : "$activityhistory",
+    "friendsList" : "$friendsList",
+    "personahistorysize": { $size: "$personahistory" },
+    "friendssize" : { $size: "$friendsList" },
+    "timesviewed" : { $sum : "$viewed" }
+  }
+}
+
 function findProfileBySteamId(id, res) {
   var match = {
     $match: {
@@ -58,7 +71,7 @@ function findProfileBySteamId(id, res) {
       "personahistory" : "$personahistory",
       "activityhistory" : "$activityhistory",
       "friendsList" : "$friendsList",
-      timesviewed : { $sum : "$viewed" }
+      "timesviewed" : { $sum : "$viewed" }
     }
   }
   SteamUser
@@ -133,7 +146,8 @@ function findProfilesBySteamIds(ids, res) {
       "profile" : "$profile",
       "personahistory" : "$personahistory",
       "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList"
+      "friendsList" : "$friendsList",
+      "timesviewed" : { $sum : "$views" }
     }
   }
   SteamUser
@@ -179,14 +193,59 @@ function findLastProfilesByCount(count, res) {
     })
 }
 
-function findAllProfiles(res) {
+function findAllProfiles(req, res) {
   var sort = {
     $sort: {
       "profile.createdAt" : -1
     }
   }
+  var match = { $match: {} };
+  var limit = { $limit: 10 };
+  if (req.query.sortBy) {
+    var sortParam = req.query.sortBy;
+    switch (req.query.sortBy) {
+      case 'personahistory':
+      case 'friends':
+        sortParam = sortParam+'size';
+        break;
+      case 'timesviewed':
+        sortParam = 'timesviewed'
+        break;
+      default:
+        sortParam = 'profile.'+sortParam;
+        break;
+    }
+    sort = {
+      $sort: {}
+    }
+    sort.$sort[sortParam] = -1;
+  }
+  if (req.query.count) {
+    var count = parseInt(req.query.count);
+    limit = {
+      $limit: count
+    }
+  }
+  if (req.query.all) {
+    limit = {
+      $limit: {}
+    }
+  }
+  var project = {
+    $project: {
+      "profile" : "$profile",
+      "personahistory" : "$personahistory",
+      "activityhistory" : "$activityhistory",
+      "friendsList" : "$friendsList",
+      "friendssize" : { $size: "$friendsList" },
+      "personahistorysize": { $size: "$personahistory" },
+      "timesviewed" : { $size : "$views" }
+    }
+  }
+
+  var pipeline = [match, unwind, group, project, sort, limit];
   SteamUser
-    .aggregate([unwind, group, sort])
+    .aggregate(pipeline)
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
@@ -224,7 +283,8 @@ function findProfilesWithPersonaHistory(count, res) {
       "personahistory" : "$personahistory",
       "activityhistory" : "$activityhistory",
       "friendsList" : "$friendsList",
-      "personahistorysize": { $size: "$personahistory" }
+      "personahistorysize": { $size: "$personahistory" },
+      "timesviewed" : { $sum : "$viewed" }
     }
   }
   var sortProject = {
@@ -274,8 +334,8 @@ function transformAggregateResponse(response) {
   profile._id = response._id;
   profile.personahistory = response.personahistory;
   profile.activityhistory = response.activityhistory;
-  profile.timesviewed = response.views.length;
-  response.friendsList ? profile.friendsList = response.friendsList : null;
+  profile.timesviewed = response.timesviewed;
+  profile.friendsList = response.friendsList ? response.friendsList : null;
   return profile;
 }
 
