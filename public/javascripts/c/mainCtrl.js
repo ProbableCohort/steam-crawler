@@ -152,6 +152,10 @@
         playerId: {
           show: true,
           name: 'Search by SteamID'
+        },
+        history: {
+          show: true,
+          name: 'Show Search Results'
         }
       }
     }

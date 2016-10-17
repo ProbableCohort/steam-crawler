@@ -109,7 +109,7 @@
           No player found for PlayerID {{player.steamid}}
         </div>
       </div>
-      <div class="row" ng-show="history.length > 1">
+      <div class="row" ng-show="history.length > 1 && views.search.history.show">
         <div class="col-xs-12">
           <h4>Previous Searches</h4>
         </div>
@@ -136,9 +136,9 @@
           </div>
           <div>
             <h4>Previous Avatars</h4>
-            <div class="personahistory-avatar" ng-repeat="h in player.personahistory | unique:'avatarfull'">
+            <span class="personahistory-avatar" ng-repeat="h in player.personahistory | unique:'avatarfull'">
                 <img ng-src="{{h.avatarfull}}" />
-            </div>
+            </span>
           </div>
 
         </div>
