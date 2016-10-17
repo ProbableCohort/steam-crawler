@@ -53,7 +53,7 @@
             {{ view.name | uppercase }}
             <a ng-click="view.onShow(view.value, view.value2)"><span class="fa fa-refresh fa-steam-href fa-lg"></span></a>
           </h3>
-          <div class="row">
+          <div class="row container">
               <steam-user-media-badge class="col-xs-12 col-sm-6 col-md-4" ng-model="p" small col="1" ng-repeat="p in profiles | limitTo:9"></steam-user-media-badge>
           </div>
         </div>
@@ -148,8 +148,10 @@
             This player has {{player.friendsList.length}} friends
           </div>
           <br />
-          <div style="margin-left: 30px;">
-            <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:'status'"></steam-user-media-badge>
+          <div class="row container">
+            <div style="margin-left: 30px;">
+              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:'status'"></steam-user-media-badge>
+            </div>
           </div>
         </div>
       </div>

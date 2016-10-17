@@ -33,6 +33,12 @@ a:hover {
   color: #656f77;
 }
 
+.row.container {
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .inline-header {
   margin-top: 15px;
   margin-bottom: 25px;
