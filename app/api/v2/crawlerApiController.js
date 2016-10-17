@@ -1,16 +1,10 @@
 var express = require('express'),
-    api     = express.Router(),
-    request = require('request'),
-    KEYS    = require('../../../private/keys'),
-    CrawlerApiService = require('./crawlerApiService');
+  api = express.Router(),
+  request = require('request'),
+  KEYS = require('../../../private/keys'),
+  CrawlerApiService = require('./crawlerApiService');
 
 var SteamUser = require('../../models/steamUser');
-
-api.get('/deleteSomeStuff', function(req, res) {
-  SteamUser.remove({ createdAt: { $gt : new Date("2016-10-14T02:25:00.489Z")} }, function() {
-    res.sendStatus(200);
-  })
-})
 
 api.use(function(req, res, next) {
   next();
@@ -39,6 +33,8 @@ api.get('/user/:id/all', function(req, res) {
 api.get('/user/', function(req, res) {
   if (req.query.ids) {
     var ids = req.query.ids.split(',');
+    var limit = 50;
+    ids = ids.slice(limit, ids.length);
     CrawlerApiService.findProfilesBySteamIds(ids, res);
   } else if (req.query.personaname) {
     CrawlerApiService.findProfileByPersonaName(req.query.personaname, res);

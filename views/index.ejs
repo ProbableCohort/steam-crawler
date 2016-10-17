@@ -83,7 +83,7 @@
                   ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"
                   ng-minlength="17" ng-maxlength="17" />
                 <span class="input-group-btn">
-                  <a class="btn btn-steam"><span class="fa fa-search"></span></a>
+                  <a class="btn btn-steam" ng-click="findPlayerInfo(player.steamid)"><span class="fa fa-search"></span></a>
                 </span>
               </div>
               <div class="help-block" ng-show="forms.steamSearch.steamid.$error.maxlength || forms.steamSearch.steamid.$error.minlength">

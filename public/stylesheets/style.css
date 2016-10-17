@@ -172,12 +172,28 @@ a .fa-steam-href:hover {
   color: #ff8c0f;
 }
 
-.steam-level-epic {
+@-webkit-keyframes steam-level-epic {
+  from { color: #a534d0; text-shadow: 0 0 9px #333; }
+  50% { color: #ce51fd; text-shadow: 0 1px 18px #8d3aad; }
+  to { color: #a534d0; text-shadow: 0 0 9px #333; }
+}
 
+.steam-level-epic {
+  -webkit-animation-name: steam-level-epic;
+  -webkit-animation-duration: 3s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes steam-level-legendary {
+  from { color: #ff8c0f; text-shadow: 0 0 9px #333; }
+  50% { color: #ffa645; text-shadow: 0 1px 18px #ff6a00; }
+  to { color: #ff8c0f; text-shadow: 0 0 9px #333; }
 }
 
 .steam-level-legendary {
-
+  -webkit-animation-name: steam-level-legendary;
+  -webkit-animation-duration: 3s;
+  -webkit-animation-iteration-count: infinite;
 }
 
 .player-profile {
