@@ -1,13 +1,13 @@
 <div class="row">
   <div class="col-xs-12" ng-show="!isRadio">
     <div class="btn-group">
-      <a class="btn btn-steam" ng-model="v.show" ng-repeat="v in view" ng-click="v.show ? v.onShow(v.value, v.value2) : null" uib-btn-checkbox>{{v.name}}</a>
+      <a class="btn btn-steam" ng-model="v.show" ng-repeat="v in view" ng-click="v.show ? v.onshow(v.value, v.value2) : null" uib-btn-checkbox>{{v.name}}</a>
     </div>
   </div>
   <div class="col-xs-12" ng-show="isRadio">
     <div class="btn-group">
       {{radioModel}}
-      <a class="btn btn-steam" ng-model="radio.model" ng-repeat="v in view" ng-click="v.show ? v.onShow(v.value, v.value2) : null" uib-btn-radio="'{{v.radio}}'">{{v.name}}</a>
+      <a class="btn btn-steam" ng-model="radio.model" ng-repeat="v in view" ng-click="v.show ? v.onshow(v.value, v.value2) : null" uib-btn-radio="'{{v.radio}}'">{{v.name}}</a>
     </div>
   </div>
   <div class="col-xs-12" ng-show="isRadio && radio.model">

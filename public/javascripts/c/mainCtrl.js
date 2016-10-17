@@ -112,29 +112,36 @@
           radio: 'recent',
           show: false,
           name: 'Recently Updated',
-          onShow: $scope.getProfiles,
+          onshow: $scope.getProfiles,
           value: 'viewedAt'
         },
         mostViewed: {
           radio: 'mostViewed',
           show: false,
           name: 'Most Viewed',
-          onShow: $scope.getProfiles,
+          onshow: $scope.getProfiles,
           value: 'timesviewed'
         },
         friends: {
           radio: 'friends',
           show: false,
           name: 'Most Friends',
-          onShow: $scope.getProfiles,
+          onshow: $scope.getProfiles,
           value: 'friends'
         },
         level: {
           radio: 'level',
           show: false,
           name: 'Highest Level',
-          onShow: $scope.getProfiles,
+          onshow: $scope.getProfiles,
           value: 'playerlevel'
+        },
+        mostPersonas: {
+          radio: 'mostPersonas',
+          show: false,
+          name: 'Most Personas',
+          onshow: $scope.getProfiles,
+          value: 'personahistory'
         }
       },
       search: {

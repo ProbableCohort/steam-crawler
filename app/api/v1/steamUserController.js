@@ -20,7 +20,6 @@ api.get('/:id', function(req, res) {
   request.get(options, function(error, steamHttpResponse, steamHttpBody) {
     if (error)
       res.send(error);
-    console.log(steamHttpBody);
     res.setHeader('Content-Type', 'application/json');
     res.send(steamHttpBody);
   });
