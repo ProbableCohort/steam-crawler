@@ -36,7 +36,8 @@ var group = {
       }
     },
     friendsList : { $addToSet : "$friendsList" },
-    views : { $addToSet : "$viewedAt" }
+    views : { $addToSet : "$viewedAt" },
+    playerlevel : { $max : "$playerlevel" }
   }
 }
 
@@ -49,7 +50,8 @@ var project = {
     "friendsList" : "$friendsList",
     "personahistorysize": { $size: "$personahistory" },
     "friendssize" : { $size: "$friendsList" },
-    "timesviewed" : { $sum : "$viewed" }
+    "timesviewed" : { $sum : "$profile.viewed" },
+    "playerlevel" : "$playerlevel"
   }
 }
 
@@ -140,22 +142,11 @@ function findProfilesBySteamIds(ids, res) {
       "profile.createdAt" : -1
     }
   }
-  var project = {
-    $project: {
-      "_id" : "$_id",
-      "profile" : "$profile",
-      "personahistory" : "$personahistory",
-      "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList",
-      "timesviewed" : { $sum : "$views" }
-    }
-  }
   SteamUser
     .aggregate([match, sort, unwind, group])
     .exec(function (err, users) {
       if (err)
         console.log(err.stack);
-      console.log(users ? users.length : null);
       var profiles = [];
       for (var i in users) {
         profiles.push(transformAggregateResponse(users[i]));
@@ -209,7 +200,7 @@ function findAllProfiles(req, res) {
         sortParam = sortParam+'size';
         break;
       case 'timesviewed':
-        sortParam = 'timesviewed'
+      case 'playerlevel':
         break;
       default:
         sortParam = 'profile.'+sortParam;
@@ -229,17 +220,6 @@ function findAllProfiles(req, res) {
   if (req.query.all) {
     limit = {
       $limit: {}
-    }
-  }
-  var project = {
-    $project: {
-      "profile" : "$profile",
-      "personahistory" : "$personahistory",
-      "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList",
-      "friendssize" : { $size: "$friendsList" },
-      "personahistorysize": { $size: "$personahistory" },
-      "timesviewed" : { $size : "$views" }
     }
   }
 
@@ -335,6 +315,7 @@ function transformAggregateResponse(response) {
   profile.personahistory = response.personahistory;
   profile.activityhistory = response.activityhistory;
   profile.timesviewed = response.timesviewed;
+  profile.playerlevel = response.playerlevel;
   profile.friendsList = response.friendsList ? response.friendsList : null;
   return profile;
 }
