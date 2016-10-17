@@ -13,6 +13,8 @@ var service = {
   persistProfiles : persistProfiles
 }
 
+////////////////////////////////////////
+
 var unwind = {
   $unwind: {
     path : "$friendsList",
@@ -52,7 +54,7 @@ var project = {
     "playerlevel" : "$playerlevel",
     "personahistorysize": { $size: "$personahistory" },
     "friendssize" : { $size: "$friendsList" },
-    "timesviewed" : { $sum : "$profile.viewed" },
+    "timesviewed" : { $size : "$views" },
     "playerlevel" : "$playerlevel"
   }
 }
@@ -68,18 +70,8 @@ function findProfileBySteamId(id, res) {
       "profile.createdAt" : -1
     }
   }
-  var project = {
-    $project : {
-      "_id" : "$_id",
-      "profile" : "$profile",
-      "personahistory" : "$personahistory",
-      "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList",
-      "timesviewed" : { $sum : "$viewed" }
-    }
-  }
   SteamUser
-    .aggregate([match, unwind, group, sort])
+    .aggregate([match, unwind, group, project, sort])
     .exec(function (err, user) {
       if (err)
         console.log(err.stack);
