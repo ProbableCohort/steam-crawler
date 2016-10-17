@@ -37,7 +37,8 @@ var group = {
       }
     },
     friendsList : { $addToSet : "$friendsList" },
-    views : { $addToSet : "$viewedAt" }
+    views : { $addToSet : "$viewedAt" },
+    playerlevel : { $max : "$playerlevel" }
   }
 }
 
@@ -51,7 +52,8 @@ var project = {
     "playerlevel" : "$playerlevel",
     "personahistorysize": { $size: "$personahistory" },
     "friendssize" : { $size: "$friendsList" },
-    "timesviewed" : { $sum : "$viewed" }
+    "timesviewed" : { $sum : "$profile.viewed" },
+    "playerlevel" : "$playerlevel"
   }
 }
 
@@ -142,16 +144,6 @@ function findProfilesBySteamIds(ids, res) {
       "profile.createdAt" : -1
     }
   }
-  var project = {
-    $project: {
-      "_id" : "$_id",
-      "profile" : "$profile",
-      "personahistory" : "$personahistory",
-      "activityhistory" : "$activityhistory",
-      "friendsList" : "$friendsList",
-      "timesviewed" : { $sum : "$views" }
-    }
-  }
   SteamUser
     .aggregate([match, sort, unwind, group])
     .exec(function (err, users) {
@@ -206,7 +198,7 @@ function findAllProfiles(req, res) {
         sortParam = sortParam+'size';
         break;
       case 'timesviewed':
-        sortParam = 'timesviewed'
+      case 'playerlevel':
         break;
       default:
         sortParam = 'profile.'+sortParam;
