@@ -90,6 +90,7 @@ function findProfileBySteamId(id, res) {
   }
   SteamUser
     .aggregate([match, unwind, group, project, sort])
+    .allowDiskUse(true)
     .exec(function(err, user) {
       if (err)
         console.log(err.stack);
@@ -118,6 +119,7 @@ function findProfileByPersonaName(name, res) {
   }
   SteamUser
     .aggregate([match, unwindPersonaname, match, unwind, group, sort])
+    .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
@@ -161,6 +163,7 @@ function findProfilesBySteamIds(ids, res) {
   }
   SteamUser
     .aggregate([match, sort, unwind, group])
+    .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
@@ -192,6 +195,7 @@ function findLastProfilesByCount(count, res) {
   }
   SteamUser
     .aggregate([match, unwind, group, sort, limit])
+    .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
@@ -248,6 +252,7 @@ function findAllProfiles(req, res) {
   }
   SteamUser
     .aggregate(pipeline)
+    .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
@@ -303,6 +308,7 @@ function findProfilesWithPersonaHistory(count, res) {
   }
   SteamUser
     .aggregate([unwind, group, sort, project, sortProject, limit])
+    .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
