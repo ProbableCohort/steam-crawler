@@ -6,20 +6,29 @@ var express = require('express'),
 var BASE_URI = 'http://api.steampowered.com/' + 'ISteamUser/';
 
 api.get('/:id', function(req, res) {
+  var steamids = req.params.id;
+  var idsArr = req.params.id.split(',');
+  if (idsArr.length > 1) {
+    var limit = 300;
+    idsArr = idsArr.slice(0, limit);
+    steamids = idsArr.join(',');
+  }
   // Calculate the Steam API URL we want to use
   var VERSION = 'v0002/'
   var url = BASE_URI + 'GetPlayerSummaries/' + VERSION;
   var query = {
     key: KEYS.STEAM_API_KEY,
-    steamids: req.params.id
+    steamids: steamids
   }
   var options = {
     url: url,
     qs: query
   }
   request.get(options, function(error, steamHttpResponse, steamHttpBody) {
-    if (error)
+    if (error) {
       res.send(error);
+      return;
+    }
     res.setHeader('Content-Type', 'application/json');
     res.send(steamHttpBody);
   });

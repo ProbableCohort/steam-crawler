@@ -196,6 +196,18 @@ a .fa-steam-href:hover {
   -webkit-animation-iteration-count: infinite;
 }
 
+@-webkit-keyframes steam-level-mythic {
+  from { color: #d43333; text-shadow: 0 0 9px #333; }
+  50% { color: #ea0616; text-shadow: 0 1px 18px #ff0000; }
+  to { color: #d43333; text-shadow: 0 0 9px #333; }
+}
+
+.steam-level-mythic {
+  -webkit-animation-name: steam-level-mythic;
+  -webkit-animation-duration: 3s;
+  -webkit-animation-iteration-count: infinite;
+}
+
 .player-profile {
 
 }

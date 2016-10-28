@@ -145,7 +145,11 @@
         <div class="col-xs-12" ng-show="ready && views.result.friends.show">
           <h3>Friends</h3>
           <div>
-            This player has {{player.friendsList.length}} friends
+            This player has {{player.friendsList.length}} friends.
+            <span ng-show="player.friends.length < player.friendsList.length">(Showing {{player.friends.length}} friends)</span>
+            <span ng-show="player.friends.length == 300 && player.friendsList.length > 300">
+              <span class="fa fa-question-circle" uib-popover="Currently only 300 friends can be shown at once." popover-class="popover-steam"></span>
+            </span>
           </div>
           <br />
           <div class="row container">

@@ -33,7 +33,7 @@ api.get('/user/:id/all', function(req, res) {
 api.get('/user/', function(req, res) {
   if (req.query.ids) {
     var ids = req.query.ids.split(',');
-    var limit = 500;
+    var limit = 300;
     ids = ids.slice(0, limit);
     CrawlerApiService.findProfilesBySteamIds(ids, res);
   } else if (req.query.personaname) {
