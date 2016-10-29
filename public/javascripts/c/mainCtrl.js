@@ -38,61 +38,16 @@
       })
     }
 
-    $scope.findPlayerInfo = function(id) {
+    $scope.findPlayerInfo = function(id, refresh) {
       if (!id) {
         return;
       }
       $scope.ready = false;
-      SteamApiService.GetPlayerSummaries(id).get(function(player) {
-        if (!player.steamid) {
-          $scope.searchResults = null;
-          return;
-        }
-        SteamApiService.GetFriendList(id).query(function(friends) {
-          if (!friends.length) {
-            $scope.getPlayerLevel(player, function(player) {
-              $scope.player = CrawlerApiService.user().save(player, function() {
-                $scope.history.unshift($scope.player);
-                $scope.updateProfileCount();
-                $scope.searchResults = null;
-                $scope.ready = true;
-              });
-            });
-            return;
-          };
-          player.friendsList = [];
-          angular.forEach(friends, function(friend) {
-            player.friendsList.push(friend.steamid);
-          })
-          player.friends = SteamApiService.GetPlayerSummaries(player.friendsList).query(function() {
-            $scope.getPlayerLevel(player, function(player) {
-              CrawlerApiService.user().saveAll(player.friends, function() {
-                $scope.player = CrawlerApiService.user().save(player, function() {
-                  $scope.player.friends = CrawlerApiService.user().query({
-                    ids: player.friendsList.join(',')
-                  })
-                  $scope.history.unshift($scope.player);
-                  $scope.updateProfileCount();
-                });
-                $scope.searchResults = null;
-                $scope.ready = true;
-              });
-            });
-          });
-        });
-
-      });
-    }
-
-    $scope.getPlayerLevel = function(player, cb) {
-      if (player.level) {
-        cb(player);
-        return;
-      }
-      SteamApiService.GetSteamLevel(player.steamid).get(function(level) {
-        player.playerlevel = level.player_level;
-        if (typeof cb === 'function')
-          cb(player);
+      $scope.player = CrawlerApiService.profile(id, refresh).get(function(player) {
+        $scope.history.unshift($scope.player);
+        $scope.updateProfileCount();
+        $scope.searchResults = null;
+        $scope.ready = true;
       })
     }
 

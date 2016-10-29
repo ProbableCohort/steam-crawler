@@ -77,7 +77,7 @@ var project = {
   }
 }
 
-function findProfileBySteamId(id, res) {
+function findProfileBySteamId(id, res, cb) {
   var match = {
     $match: {
       steamid: id,
@@ -94,6 +94,10 @@ function findProfileBySteamId(id, res) {
     .exec(function(err, user) {
       if (err)
         console.log(err.stack);
+      if (cb && typeof cb === 'function') {
+        cb(transformAggregateResponse(user[0]));
+        return;
+      }
       res.send(transformAggregateResponse(user[0]));
     })
 }
@@ -146,7 +150,7 @@ function findAllRecordsForProfileBySteamId(id, res) {
     })
 }
 
-function findProfilesBySteamIds(ids, res) {
+function findProfilesBySteamIds(ids, res, cb) {
   var match = {
     $match: {
       $and: [{
@@ -170,6 +174,10 @@ function findProfilesBySteamIds(ids, res) {
       var profiles = [];
       for (var i in users) {
         profiles.push(transformAggregateResponse(users[i]));
+      }
+      if (cb && typeof cb === 'function') {
+        cb(profiles);
+        return;
       }
       res.send(profiles);
     })
@@ -320,21 +328,29 @@ function findProfilesWithPersonaHistory(count, res) {
     })
 }
 
-function persistProfile(profile, res) {
+function persistProfile(profile, res, cb) {
+  delete profile._id;
+  delete profile.createdAt;
+  delete profile.updatedAt;
   profile.viewedAt = new Date();
+  console.log(profile);
   SteamUser
     .create(profile, function(err, profile) {
       if (err)
         console.log(err.stack);
-      findProfileBySteamId(profile.steamid, res);
+      findProfileBySteamId(profile.steamid, res, cb);
     })
 }
 
-function persistProfiles(profiles, res) {
+function persistProfiles(profiles, res, cb) {
   SteamUser
     .insertMany(profiles, function(err, profiles) {
       if (err)
         console.log(err.stack);
+      if (cb && typeof cb === 'function') {
+        cb(profiles);
+        return;
+      }
       res.send(profiles);
     })
 }
@@ -344,6 +360,7 @@ function transformAggregateResponse(response) {
     return null;
   var profile = response.profile;
   profile._id = response._id;
+  profile.friends = response.friends;
   profile.personahistory = response.personahistory;
   profile.activityhistory = response.activityhistory;
   profile.timesviewed = response.timesviewed;

@@ -9,40 +9,79 @@
     var BASE_URI = '/api/v2/crawler'
 
     var service = {
-      user : user
+      profile: profile,
+      user: user
     }
 
     return service;
 
     ///////////////
 
+    function profile(id, refresh) {
+      console.log(id, refresh);
+      var URI = BASE_URI + '/player/:action/:id';
+      refresh ? URI += '&refresh=true' : null;
+      console.log(URI);
+      var PARAMS = {
+        id: id
+      };
+      var OPTIONS = {
+        'saveAll': {
+          method: 'POST',
+          isArray: true
+        },
+        'last': {
+          method: 'GET',
+          params: {
+            action: 'last'
+          },
+          isArray: true
+        },
+        'all': {
+          method: 'GET',
+          params: {
+            action: 'all'
+          },
+          isArray: true
+        },
+        'count': {
+          method: 'GET',
+          params: {
+            action: 'all',
+            id: 'count'
+          }
+        }
+      }
+      return $resource(URI, PARAMS, OPTIONS);
+    }
+
     function user(id) {
       var URI = BASE_URI + '/user/:action/:id';
       var PARAMS = {};
       var OPTIONS = {
-        'saveAll' : {
-          method : 'POST',
-          isArray : true
+        'saveAll': {
+          method: 'POST',
+          isArray: true
         },
-        'last' : {
-          method : 'GET',
-          params : {
-            action : 'last'
+        'last': {
+          method: 'GET',
+          params: {
+            action: 'last'
           },
-          isArray : true
+          isArray: true
         },
-        'all' : {
-          method : 'GET',
-          params : {
-            action : 'all'
+        'all': {
+          method: 'GET',
+          params: {
+            action: 'all'
           },
-          isArray : true
+          isArray: true
         },
-        'count' : {
-          method : 'GET',
-          params : {
-            action : 'all',
-            id : 'count'
+        'count': {
+          method: 'GET',
+          params: {
+            action: 'all',
+            id: 'count'
           }
         }
       }
