@@ -59,7 +59,18 @@ var group = {
 var project = {
   $project: {
     "_id": "$_id",
-    "profile": "$profile",
+    "steamid": "$profile.steamid",
+    "personaname": "$profile.personaname",
+    "avatarfull": "$profile.avatarfull",
+    "createdAt": "$profile.createdAt",
+    "lastlogoff": "$profile.lastlogoff",
+    "personanstate": "$profile.personastate",
+    "viewedAt": "$profile.viewedAt",
+    "communityvisibilitystate": "$profile.communityvisibilitystate",
+    "personastate": "$profile.personastate",
+    "profilestate": "$profile.profilestate",
+    "primaryclanid": "$profile.primaryclanid",
+    "realname": "$profile.realname",
     "personahistory": "$personahistory",
     "activityhistory": "$activityhistory",
     "friendsList": "$friendsList",
@@ -95,10 +106,10 @@ function findProfileBySteamId(id, res, cb) {
       if (err)
         console.log(err.stack);
       if (cb && typeof cb === 'function') {
-        cb(transformAggregateResponse(user[0]));
+        cb(user[0]);
         return;
       }
-      res.send(transformAggregateResponse(user[0]));
+      res.send(user[0]);
     })
 }
 
@@ -122,14 +133,14 @@ function findProfileByPersonaName(name, res) {
     }
   }
   SteamUser
-    .aggregate([match, unwindPersonaname, match, unwind, group, sort])
+    .aggregate([match, unwindPersonaname, match, unwind, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
       var profiles = [];
       for (var i in users) {
-        profiles.push(transformAggregateResponse(users[i]));
+        profiles.push(users[i]);
       }
       res.send(profiles);
     })
@@ -166,14 +177,14 @@ function findProfilesBySteamIds(ids, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, sort, unwind, group])
+    .aggregate([match, sort, unwind, group, project])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
       var profiles = [];
       for (var i in users) {
-        profiles.push(transformAggregateResponse(users[i]));
+        profiles.push(users[i]);
       }
       if (cb && typeof cb === 'function') {
         cb(profiles);
@@ -209,7 +220,7 @@ function findLastProfilesByCount(count, res) {
         console.log(err.stack);
       var profiles = [];
       for (var i in users) {
-        profiles.push(transformAggregateResponse(users[i]));
+        profiles.push(users[i]);
       }
       res.send(profiles);
     })
@@ -266,7 +277,7 @@ function findAllProfiles(req, res) {
         console.log(err.stack);
       var profiles = [];
       for (var i in users) {
-        profiles.push(transformAggregateResponse(users[i]));
+        profiles.push(users[i]);
       }
       res.send(profiles);
     })
@@ -322,7 +333,7 @@ function findProfilesWithPersonaHistory(count, res) {
         console.log(err.stack);
       var profiles = [];
       for (var i in users) {
-        profiles.push(transformAggregateResponse(users[i]));
+        profiles.push(users[i]);
       }
       res.send(profiles);
     })
@@ -352,20 +363,6 @@ function persistProfiles(profiles, res, cb) {
       }
       res.send(profiles);
     })
-}
-
-function transformAggregateResponse(response) {
-  if (!response)
-    return null;
-  var profile = response.profile;
-  profile._id = response._id;
-  profile.friends = response.friends;
-  profile.personahistory = response.personahistory;
-  profile.activityhistory = response.activityhistory;
-  profile.timesviewed = response.timesviewed;
-  profile.playerlevel = response.playerlevel;
-  profile.friendsList = response.friendsList ? response.friendsList : null;
-  return profile;
 }
 
 module.exports = service;
