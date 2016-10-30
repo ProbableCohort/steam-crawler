@@ -333,7 +333,6 @@ function persistProfile(profile, res, cb) {
   delete profile.createdAt;
   delete profile.updatedAt;
   profile.viewedAt = new Date();
-  console.log(profile);
   SteamUser
     .create(profile, function(err, profile) {
       if (err)

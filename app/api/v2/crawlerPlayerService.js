@@ -77,12 +77,12 @@ function getFriends(profile, cb) {
       friendsList.push(friends[i].steamid);
     }
     friendsList = shuffleArray(friendsList);
-    profile.friendsList = friendsList;
     friendsList = friendsList.splice(0, 300);
     SteamUserService.GetPlayerSummaries(friendsList, null, function(players) {
       CrawlerApiService.persistProfiles(players, null, function(profiles) {
-        CrawlerApiService.findProfilesBySteamIds(profile.friendsList, null, function(friends) {
+        CrawlerApiService.findProfilesBySteamIds(friendsList, null, function(friends) {
           profile.friends = friends;
+          profile.friendsList = friendsList;
           cb(profile);
         })
       });
