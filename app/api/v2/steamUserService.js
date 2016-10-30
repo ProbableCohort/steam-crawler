@@ -51,7 +51,7 @@ function GetFriendList(id, res, cb) {
       res.send(error);
     if (cb && typeof cb === 'function') {
       var json = JSON.parse(steamHttpBody);
-      var friends = json.friendslist.friends;
+      var friends = json.friendslist ? json.friendslist.friends : [];
       cb(friends);
       return;
     }

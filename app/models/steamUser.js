@@ -1,5 +1,5 @@
-var mongoose  = require('mongoose'),
-    Schema    = mongoose.Schema;
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
 
 // import schemas
 
@@ -26,8 +26,10 @@ var steamUserSchema = mongoose.Schema({
   "timecreated": Number,
   "friendsList": [String]
 }, {
-  timestamps : true
+  timestamps: true
 });
+
+steamUserSchema.set('autoIndex', false);
 
 // create the model for venues and expose it to our app
 module.exports = mongoose.model('steamUser', steamUserSchema);

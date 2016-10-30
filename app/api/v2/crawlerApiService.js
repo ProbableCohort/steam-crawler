@@ -52,7 +52,11 @@ var group = {
     },
     playerlevel: {
       $max: "$playerlevel"
+    },
+    viewedAt: {
+      $last: "$viewedAt"
     }
+
   }
 }
 
@@ -65,7 +69,7 @@ var project = {
     "createdAt": "$profile.createdAt",
     "lastlogoff": "$profile.lastlogoff",
     "personanstate": "$profile.personastate",
-    "viewedAt": "$profile.viewedAt",
+    "viewedAt": "$viewedAt",
     "communityvisibilitystate": "$profile.communityvisibilitystate",
     "personastate": "$profile.personastate",
     "profilestate": "$profile.profilestate",
@@ -96,7 +100,7 @@ function findProfileBySteamId(id, res, cb) {
   }
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   SteamUser
@@ -129,7 +133,7 @@ function findProfileByPersonaName(name, res) {
   }
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   SteamUser
@@ -173,7 +177,7 @@ function findProfilesBySteamIds(ids, res, cb) {
   }
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   SteamUser
@@ -206,7 +210,7 @@ function findLastProfilesByCount(count, res) {
   }
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   var limit = {
@@ -229,7 +233,7 @@ function findLastProfilesByCount(count, res) {
 function findAllProfiles(req, res) {
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   var match = {
@@ -249,14 +253,14 @@ function findAllProfiles(req, res) {
       case 'playerlevel':
         break;
       default:
-        sortParam = 'profile.' + sortParam;
         break;
     }
     sort = {
       $sort: {}
     }
     sort.$sort[sortParam] = -1;
-    sort.$sort['profile.createdAt'] = -1;
+    sort.$sort['createdAt'] = -1;
+    console.log(sort);
   }
   if (req.query.count) {
     var count = parseInt(req.query.count);
@@ -300,7 +304,7 @@ function findProfilesWithPersonaHistory(count, res) {
   count = parseInt(count);
   var sort = {
     $sort: {
-      "profile.createdAt": -1
+      "createdAt": -1
     }
   }
   var project = {
