@@ -68,7 +68,6 @@ var project = {
     "avatarfull": "$profile.avatarfull",
     "createdAt": "$profile.createdAt",
     "lastlogoff": "$profile.lastlogoff",
-    "personanstate": "$profile.personastate",
     "viewedAt": "$viewedAt",
     "communityvisibilitystate": "$profile.communityvisibilitystate",
     "personastate": "$profile.personastate",
@@ -181,7 +180,7 @@ function findProfilesBySteamIds(ids, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, sort, unwind, group, project])
+    .aggregate([match, unwind, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
@@ -260,7 +259,6 @@ function findAllProfiles(req, res) {
     }
     sort.$sort[sortParam] = -1;
     sort.$sort['createdAt'] = -1;
-    console.log(sort);
   }
   if (req.query.count) {
     var count = parseInt(req.query.count);

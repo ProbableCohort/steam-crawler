@@ -17,11 +17,8 @@
 
     ///////////////
 
-    function profile(id, refresh) {
-      console.log(id, refresh);
+    function profile(id) {
       var URI = BASE_URI + '/player/:action/:id';
-      refresh ? URI += '&refresh=true' : null;
-      console.log(URI);
       var PARAMS = {
         id: id
       };

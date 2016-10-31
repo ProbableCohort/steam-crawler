@@ -43,7 +43,20 @@
         return;
       }
       $scope.ready = false;
-      $scope.player = CrawlerApiService.profile(id, refresh).get(function(player) {
+      CrawlerApiService.profile(id).get({
+        withFriends: true
+      }, function(player) {
+        $scope.player = player;
+        $scope.player.friendsLoaded = true;
+      })
+      $scope.player = CrawlerApiService.profile(id).get(function(player) {
+        $scope.player.updatingProfile = true;
+        CrawlerApiService.profile(id).get({
+          refresh: true
+        }, function(player) {
+          $scope.player = player;
+          $scope.player.profileUpdated = true;
+        })
         $scope.history.unshift($scope.player);
         $scope.updateProfileCount();
         $scope.searchResults = null;

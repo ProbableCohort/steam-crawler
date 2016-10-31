@@ -116,8 +116,8 @@
           <h4>Previous Searches</h4>
         </div>
         <div ng-repeat="player in history | unique:'personaname'" class="col-xs-6 col-sm-4 steam-search-history" style="margin-bottom: 5px; height: 38px;" ng-hide="$index == 0">
-            <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
-            <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
+          <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
+          <a ng-click="findPlayerInfo(player.steamid)" ng-class="{ 'smaller' : player.personaname.length > 22, 'smallest' : player.personaname.length > 30 }">{{player.personaname}}</a>
         </div>
       </div>
       <br />
@@ -127,12 +127,18 @@
           Loading Player Data
         </div>
         <div class="col-xs-12" ng-show="ready">
-          <h3>Player Found</h3>
+          <h3>
+            Player Found
+            <span ng-show="!player.profileUpdated" class="fa fa-circle-o-notch fa-spin"
+              uib-popover="Updating profile" popover-trigger="'mouseenter'"
+              popover-class="popover-steam">
+            </span>
+          </h3>
           <steam-user-media-badge ng-model="player" col="2"></steam-user-media-badge>
           <custom-button-group ng-model="views.result"></custom-button-group>
         </div>
         <div class="col-xs-12 player-profile" ng-show="ready && views.result.profile.show">
-          <h3>Profile</h3>
+          <h3>Profile <span ng-show="!player.profileUpdated" class="fa fa-circle-o-notch fa-spin"></span></h3>
           <div>
             This player has been viewed {{player.timesviewed}} times.
           </div>
@@ -145,18 +151,30 @@
 
         </div>
         <div class="col-xs-12" ng-show="ready && views.result.friends.show">
-          <h3>Friends</h3>
-          <div>
-            This player has {{player.friendsList.length}} friends.
-            <span ng-show="player.friends.length < player.friendsList.length">(Showing {{player.friends.length}} friends)</span>
-            <span ng-show="player.friends.length == 300 && player.friendsList.length > 300">
-              <span class="fa fa-question-circle" uib-popover="Currently only 300 friends can be shown at once." popover-class="popover-steam"></span>
+          <h3>
+            Friends
+            <span ng-show="!player.friendsLoaded && !player.profileUpdated" class="fa fa-circle-o-notch fa-spin"
+              uib-popover="Updating profile" popover-trigger="'mouseenter'"
+              popover-class="popover-steam">
             </span>
+          </h3>
+          <div ng-show="player.friendsList.length">
+            This player has {{player.friendsList.length}} friends.
+            <span ng-show="player.friends.length < player.friendsList.length">
+              (Showing {{player.friends.length}} friends)
+              <span class="fa fa-question-circle fa-steam-href" uib-popover="Profiles with more than 100 friends may not populate all friends from a single viewing." popover-class="popover-steam"></span>
+            </span>
+            <div ng-show="!player.friends.length">
+              No profiles found for {{player.personaname}}'s friends.
+            </div>
+          </div>
+          <div ng-show="!player.friendsList.length && player.profileUpdated">
+            No friends found for this profile.
           </div>
           <br />
           <div class="row container">
             <div style="margin-left: 30px;">
-              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:'status'"></steam-user-media-badge>
+              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:['status', '-timesviewed', '-steamid' ]"></steam-user-media-badge>
             </div>
           </div>
         </div>

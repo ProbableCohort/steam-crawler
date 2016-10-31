@@ -9,7 +9,8 @@ var service = {
 var BASE_URI = 'http://api.steampowered.com/' + 'ISteamUser/';
 
 function GetPlayerSummaries(ids, res, cb) {
-  ids = ids.join(',');
+  if (!(typeof ids === 'string'))
+    ids = ids.join(',');
   // Calculate the Steam API URL we want to use
   var VERSION = 'v0002/'
   var url = BASE_URI + 'GetPlayerSummaries/' + VERSION;
@@ -22,7 +23,6 @@ function GetPlayerSummaries(ids, res, cb) {
     qs: query
   }
   request.get(options, function(error, steamHttpResponse, steamHttpBody) {
-    console.log(error);
     if (error)
       res.send(error);
     if (cb && typeof cb === 'function') {
@@ -48,7 +48,7 @@ function GetFriendList(id, res, cb) {
   }
   request.get(options, function(error, steamHttpResponse, steamHttpBody) {
     if (error)
-      res.send(error);
+      console.log(error);
     if (cb && typeof cb === 'function') {
       var json = JSON.parse(steamHttpBody);
       var friends = json.friendslist ? json.friendslist.friends : [];

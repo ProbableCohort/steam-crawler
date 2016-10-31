@@ -5,33 +5,31 @@ var request = require('request'),
   SteamPlayerService = require('./steamPlayerService');
 
 var service = {
-  getProfile: getProfile
+  getProfile: getProfile,
+  populateProfile: populateProfile,
+  getFriends: getFriends
 }
 
-function getProfile(id, refresh, cb) {
+function getProfile(id, withFriends, cb) {
   CrawlerApiService.findProfileBySteamId(id, null, function(profile) {
-    if (!profile || refresh) {
-      SteamUserService.GetPlayerSummaries(id, null, function(profile) {
-        populateProfile(profile[0], function(profile) {
-          cb(profile);
-        })
-      })
+    if (withFriends) {
+      getFriends(profile, cb);
     } else {
-      populateProfile(profile, function(profile) {
-        cb(profile);
-      })
+      cb(profile);
     }
+  })
+}
+
+function populateProfile(id, cb) {
+  SteamUserService.GetPlayerSummaries(id, null, function(profiles) {
+    getSteamLevel(profiles[0], function(profile) {
+      populateFriends(profile, function(profile) {
+        updateProfile(profile, cb);
+      })
+    })
 
   });
 
-}
-
-function populateProfile(profile, cb) {
-  getSteamLevel(profile, function(profile) {
-    getFriends(profile, function(profile) {
-      updateProfile(profile, cb);
-    })
-  })
 }
 
 function updateProfile(profile, cb) {
@@ -48,29 +46,15 @@ function getSteamLevel(profile, cb) {
   })
 }
 
-function populateFriends(profile, cb) {
-  if (!profile.friendsList.length) {
-    getFriends(profile, function(friends) {
-      profile.friends = friends;
-      cb(profile);
-    })
-  } else {
-    CrawlerApiService.findProfilesBySteamIds(profile.friendsList, null, function(friends) {
-      profile.friends = friends;
-      if (friends.length < profile.friendsList.length) {
-        getFriends(profile, function(friends) {
-          profile.friends = friends;
-          cb(profile);
-        })
-      } else {
-        cb(profile);
-      }
-    });
+function getFriends(profile, cb) {
+  CrawlerApiService.findProfilesBySteamIds(profile.friendsList, null, function(friends) {
+    profile.friends = friends;
+    cb(profile);
+  });
 
-  }
 }
 
-function getFriends(profile, cb) {
+function populateFriends(profile, cb) {
   SteamUserService.GetFriendList(profile.steamid, null, function(friends) {
     var friendsList = [];
     for (var i in friends) {
@@ -79,6 +63,7 @@ function getFriends(profile, cb) {
     friendsList = shuffleArray(friendsList);
     friendsList = friendsList.splice(0, 300);
     SteamUserService.GetPlayerSummaries(friendsList, null, function(players) {
+
       CrawlerApiService.persistProfiles(players, null, function(profiles) {
         CrawlerApiService.findProfilesBySteamIds(friendsList, null, function(friends) {
           profile.friends = friends;

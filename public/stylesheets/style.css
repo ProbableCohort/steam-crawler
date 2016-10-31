@@ -33,6 +33,26 @@ a:hover {
   color: #656f77;
 }
 
+.smaller {
+  font-size: 0.7em;
+}
+
+.smallest {
+  font-size: 0.55em;
+}
+
+.larger .smaller {
+  font-size: 0.9em;
+}
+
+.larger .smallest {
+  font-size: 0.8em;
+}
+
+.float-right * {
+  float: right;
+}
+
 .row.container {
   padding: 0px;
   display: flex;
@@ -128,6 +148,7 @@ a .fa-steam-href:hover {
 
 .steam-user-media-badge {
   min-height: 72px;
+  /*background: rgba(61, 84, 97, 0.2);*/
 }
 
 .steam-user-media-badge .media-object {
@@ -135,7 +156,25 @@ a .fa-steam-href:hover {
   width: 72px;
 }
 
+.steam-user-media-badge.larger {
+  min-height: 90px;
+}
+
+.steam-user-media-badge.larger .media-object {
+  height: 90px;
+  width: 90px;
+}
+
 .steam-user-media-badge .media-heading span, .steam-user-media-badge .media-heading a:not(.btn) {
+}
+
+.steam-user-media-badge .media-body .row .col {
+  margin-bottom: 0px;
+}
+
+.steam-user-media-badge .media-body .media-content {
+  /*position: absolute;
+  bottom: 0px;*/
 }
 
 .steam-status-online {

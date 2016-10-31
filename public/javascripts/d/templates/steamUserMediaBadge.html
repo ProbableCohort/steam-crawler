@@ -1,25 +1,37 @@
-<div class="media steam-user-media-badge">
+<div class="media steam-user-media-badge" ng-class="{ 'larger' : !small }">
   <div class="media-left">
     <img class="media-object" ng-class="{ 'steam-status-online' : steamUser.status == 0 }" ng-src="{{steamUser.avatarfull}}" />
   </div>
   <div class="media-body">
     <div class="" ng-class="{ 'col-sm-6' : col == 2, 'col-sm-12' : !small }">
       <h4 class="media-heading">
-        <span ng-show="col > 1">{{steamUser.personaname}}</span>
-        <a ng-click="findPlayerInfo(steamUser.steamid)" ng-show="col == 1">{{steamUser.personaname}}</a>
+        <span class="steam-personaname" ng-class="{ 'smaller' : steamUser.personaname.length > 22, 'smallest' : steamUser.personaname.length > 30 }">
+          <span ng-show="col > 1">{{steamUser.personaname}}</span>
+          <a ng-click="findPlayerInfo(steamUser.steamid)" ng-show="col == 1">{{steamUser.personaname}}</a>
+        </span>
         <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
       </h4>
-      <div ng-show="!small">
-        <strong ng-class="{ 'text-success' : steamUser.status == 0, 'text-danger' : steamUser.status == 2, 'text-warning' : steamUser.status == 1 }">
-          {{determinePersonaState(steamUser)}}
-        </strong>
-        <span ng-if="steamUser.status == 2"> - Last online @ {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
-      </div>
-      <span ng-if="steamUser.playerlevel" ng-class="getLevelColor(steamUser.playerlevel)">
-        <strong>Level {{steamUser.playerlevel}}</strong>
-      </span>
-      <div class="text-muted">
-        {{steamUser.friendsList.length}} Friends
+      <div class="row media-content">
+        <div class="col col-xs-12" ng-show="!small && !steamUser.playerlevel">
+          &nbsp;
+        </div>
+        <div class="col col-xs-12" ng-show="!small">
+          <strong ng-class="{ 'text-success' : steamUser.status == 0, 'text-danger' : steamUser.status == 2, 'text-warning' : steamUser.status == 1 }">
+            {{determinePersonaState(steamUser)}}
+          </strong>
+          <span ng-if="steamUser.personastate == 0"> since {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
+        </div>
+        <div class="col col-xs-12" ng-if="steamUser.playerlevel">
+          <span ng-class="getLevelColor(steamUser.playerlevel)">
+            <strong>Level {{steamUser.playerlevel}}</strong>
+          </span>
+        </div>
+        <div  class="col col-xs-6 text-muted">
+          {{steamUser.friendsList.length}} Friends
+        </div>
+        <div class="col col-xs-6">
+          <span>{{steamUser.timesviewed}} Views</span>
+        </div>
       </div>
     </div>
     <div class="col-sm-6" ng-show="col > 1">

@@ -7,9 +7,15 @@ var express = require('express'),
   SteamPlayerService = require('./steamPlayerService');
 
 api.get('/:id', function(req, res) {
-  CrawlerPlayerService.getProfile(req.params.id, req.query.refresh, function(profile) {
-    res.send(profile);
-  })
+  if (req.query.refresh) {
+    CrawlerPlayerService.populateProfile(req.params.id, function(profile) {
+      res.send(profile);
+    })
+  } else {
+    CrawlerPlayerService.getProfile(req.params.id, req.query.withFriends, function(profile) {
+      res.send(profile);
+    })
+  }
 })
 
 ///
