@@ -25,8 +25,38 @@ var unwind = {
 var group = {
   $group: {
     _id: "$steamid",
-    profile: {
-      $last: "$$ROOT"
+    "steamid": {
+      $last: "$steamid"
+    },
+    "personaname": {
+      $last: "$personaname"
+    },
+    "avatarfull": {
+      $last: "$avatarfull"
+    },
+    "createdAt": {
+      $last: "$createdAt"
+    },
+    "lastlogoff": {
+      $last: "$lastlogoff"
+    },
+    "viewedAt": {
+      $last: "$viewedAt"
+    },
+    "communityvisibilitystate": {
+      $last: "$communityvisibilitystate"
+    },
+    "personastate": {
+      $last: "$personastate"
+    },
+    "profilestate": {
+      $last: "$profilestate"
+    },
+    "primaryclanid": {
+      $last: "$primaryclanid"
+    },
+    "realname": {
+      $last: "$realname"
     },
     playerlevel: {
       $max: "$playerlevel"
@@ -37,21 +67,11 @@ var group = {
         avatarfull: "$avatarfull"
       }
     },
-    activityhistory: {
-      $addToSet: {
-        personaname: "$personaname",
-        avatarfull: "$avatarfull",
-        personastate: "$personastate"
-      }
-    },
     friendsList: {
       $addToSet: "$friendsList"
     },
     views: {
       $addToSet: "$viewedAt"
-    },
-    playerlevel: {
-      $max: "$playerlevel"
     },
     viewedAt: {
       $last: "$viewedAt"
@@ -63,19 +83,18 @@ var group = {
 var project = {
   $project: {
     "_id": "$_id",
-    "steamid": "$profile.steamid",
-    "personaname": "$profile.personaname",
-    "avatarfull": "$profile.avatarfull",
-    "createdAt": "$profile.createdAt",
-    "lastlogoff": "$profile.lastlogoff",
+    "steamid": "$steamid",
+    "personaname": "$personaname",
+    "avatarfull": "$avatarfull",
+    "createdAt": "$createdAt",
+    "lastlogoff": "$lastlogoff",
     "viewedAt": "$viewedAt",
-    "communityvisibilitystate": "$profile.communityvisibilitystate",
-    "personastate": "$profile.personastate",
-    "profilestate": "$profile.profilestate",
-    "primaryclanid": "$profile.primaryclanid",
-    "realname": "$profile.realname",
+    "communityvisibilitystate": "$communityvisibilitystate",
+    "personastate": "$personastate",
+    "profilestate": "$profilestate",
+    "primaryclanid": "$primaryclanid",
+    "realname": "$realname",
     "personahistory": "$personahistory",
-    "activityhistory": "$activityhistory",
     "friendsList": "$friendsList",
     "playerlevel": "$playerlevel",
     "personahistorysize": {
@@ -86,8 +105,7 @@ var project = {
     },
     "timesviewed": {
       $size: "$views"
-    },
-    "playerlevel": "$playerlevel"
+    }
   }
 }
 
@@ -230,6 +248,7 @@ function findLastProfilesByCount(count, res) {
 }
 
 function findAllProfiles(req, res) {
+  console.log('[' + new Date().getTime() + ']' + 'findAllProfiles running');
   var sort = {
     $sort: {
       "createdAt": -1
@@ -271,17 +290,18 @@ function findAllProfiles(req, res) {
   if (!req.query.all) {
     pipeline.push(limit);
   }
+  var aggregateStartTime = new Date().getTime();
+  console.log('[' + aggregateStartTime + ']' + 'findAllProfiles aggregate begins');
   SteamUser
     .aggregate(pipeline)
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
         console.log(err.stack);
-      var profiles = [];
-      for (var i in users) {
-        profiles.push(users[i]);
-      }
-      res.send(profiles);
+      var aggregateEndTime = new Date().getTime();
+      console.log('[' + aggregateEndTime + ']' + 'findAllProfiles aggregate ends');
+      console.log('[' + aggregateEndTime + ']' + 'findAllProfiles aggregate lasted ' + (aggregateEndTime - aggregateStartTime) + 'ms');
+      res.send(users);
     })
 }
 
