@@ -7,10 +7,10 @@
   <div class="col-xs-12" ng-show="isRadio">
     <div class="btn-group">
       {{radioModel}}
-      <a class="btn btn-steam" ng-model="radio.model" ng-repeat="v in view" ng-click="v.show ? v.onshow(v.value, v.value2) : null" uib-btn-radio="'{{v.radio}}'">{{v.name}}</a>
+      <a class="btn btn-steam" ng-model="radio.model" ng-repeat="v in view" ng-click="v.show ? v.onshow(v.value, v.value2) : null" ng-init="v.show ? radio.model = v.radio : null" uib-btn-radio="'{{v.radio}}'">{{v.name}}</a>
     </div>
   </div>
-  <div class="col-xs-12" ng-show="isRadio && radio.model">
+  <div class="col-xs-12" ng-show="isRadio && radio.model && hideable">
     <a class="btn btn-steam" ng-click="clearRadioState()">Hide this section</a>
   </div>
 </div>

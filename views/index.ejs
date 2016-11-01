@@ -46,7 +46,7 @@
           <h1>{{stats.profileCount}}</h1><h3>Profiles recorded</h3>
         </div>
         <div class="col-xs-12">
-            <custom-button-group radio ng-model="views.general"></custom-button-group>
+            <custom-button-group radio hideable ng-model="views.general"></custom-button-group>
         </div>
         <div class="col-xs-12" ng-repeat="view in views.general" ng-show="view.show">
           <h3>
@@ -164,7 +164,7 @@
               (Showing {{player.friends.length}} friends)
               <span class="fa fa-question-circle fa-steam-href" uib-popover="Profiles with more than 100 friends may not populate all friends from a single viewing." popover-class="popover-steam"></span>
             </span>
-            <div ng-show="!player.friends.length">
+            <div ng-show="!player.friends.length && player.profileUpdated">
               No profiles found for {{player.personaname}}'s friends.
             </div>
           </div>
@@ -173,8 +173,33 @@
           </div>
           <br />
           <div class="row container">
+            <div class="col-xs-12">
+              <custom-button-group radio ng-model="friendsList.size"></custom-button-group>
+            </div>
             <div style="margin-left: 30px;">
-              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1" ng-repeat="friend in player.friends | orderBy:['status', '-timesviewed', '-steamid' ]"></steam-user-media-badge>
+              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1"
+                ng-repeat="friend in player.friends | orderBy:['status', '-timesviewed', '-steamid' ] | limitTo:friendsList.indexLength:friendsList.indexStart">
+              </steam-user-media-badge>
+            </div>
+            <br />
+            <div class="col-xs-12" ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
+              <div class="row">
+                <a class="col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 btn btn-steam" ng-click="friendsList.indexStart+friendsList.indexLength < player.friends.length ? friendsList.indexStart=friendsList.indexStart+friendsList.indexLength : friendsList.indexStart = 0">
+                  <span ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
+                    Show next {{friendsList.indexStart+(friendsList.indexLength*2) < player.friends.length ? friendsList.indexLength : player.friends.length - (friendsList.indexStart+friendsList.indexLength)}} friends
+                  </span>
+                  <span ng-show="friendsList.indexStart+friendsList.indexLength >= player.friends.length">
+                    Back to beginning of Friends List
+                  </span>
+                </a>
+              </div>
+              <br />
+              <div class="text-center">
+                Showing {{friendsList.indexStart + 1}} to {{friendsList.indexStart+friendsList.indexLength}} out of {{player.friends.length}} friends
+                <a class="fa fa-refresh fa-steam-href" ng-click="friendsList.indexStart=0" ng-show="friendsList.indexStart>0"
+                  uib-popover="Back to beginning of Friends List" popover-trigger="'mouseenter'" popover-class="popover-steam">
+                </a>
+              </div>
             </div>
           </div>
         </div>

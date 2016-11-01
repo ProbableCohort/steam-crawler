@@ -61,13 +61,13 @@ function populateFriends(profile, cb) {
       friendsList.push(friends[i].steamid);
     }
     friendsList = shuffleArray(friendsList);
-    friendsList = friendsList.splice(0, 300);
-    SteamUserService.GetPlayerSummaries(friendsList, null, function(players) {
-
+    var fullFriendsList = Array.from(friendsList);
+    truncatedFriendsList = friendsList.splice(0, 300);
+    SteamUserService.GetPlayerSummaries(truncatedFriendsList, null, function(players) {
       CrawlerApiService.persistProfiles(players, null, function(profiles) {
-        CrawlerApiService.findProfilesBySteamIds(friendsList, null, function(friends) {
+        CrawlerApiService.findProfilesBySteamIds(fullFriendsList, null, function(friends) {
           profile.friends = friends;
-          profile.friendsList = friendsList;
+          profile.friendsList = fullFriendsList;
           cb(profile);
         })
       });
