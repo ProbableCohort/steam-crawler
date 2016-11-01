@@ -260,6 +260,72 @@ function findAllProfiles(req, res) {
   var limit = {
     $limit: 10
   }
+
+  var group = {
+    $group: {
+      _id: "$steamid",
+      "steamid": {
+        $last: "$steamid"
+      },
+      "personaname": {
+        $last: "$personaname"
+      },
+      "avatarfull": {
+        $last: "$avatarfull"
+      },
+      "createdAt": {
+        $last: "$createdAt"
+      },
+      "viewedAt": {
+        $last: "$viewedAt"
+      },
+      "personastate": {
+        $last: "$personastate"
+      },
+      playerlevel: {
+        $max: "$playerlevel"
+      },
+      personahistory: {
+        $addToSet: {
+          personaname: "$personaname",
+          avatarfull: "$avatarfull"
+        }
+      },
+      friendsList: {
+        $addToSet: "$friendsList"
+      },
+      views: {
+        $addToSet: "$viewedAt"
+      },
+      viewedAt: {
+        $last: "$viewedAt"
+      }
+
+    }
+  }
+
+  var project = {
+    $project: {
+      "_id": "$_id",
+      "steamid": "$steamid",
+      "personaname": "$personaname",
+      "avatarfull": "$avatarfull",
+      "createdAt": "$createdAt",
+      "viewedAt": "$viewedAt",
+      "personastate": "$personastate",
+      "personahistory": "$personahistory",
+      "playerlevel": "$playerlevel",
+      "personahistorysize": {
+        $size: "$personahistory"
+      },
+      "friendssize": {
+        $size: "$friendsList"
+      },
+      "timesviewed": {
+        $size: "$views"
+      }
+    }
+  }
   if (req.query.sortBy) {
     var sortParam = req.query.sortBy;
     switch (req.query.sortBy) {
@@ -375,6 +441,9 @@ function persistProfile(profile, res, cb) {
 }
 
 function persistProfiles(profiles, res, cb) {
+  if (!profiles || !profiles.length) {
+    return cb(profiles)
+  }
   SteamUser
     .insertMany(profiles, function(err, profiles) {
       if (err)

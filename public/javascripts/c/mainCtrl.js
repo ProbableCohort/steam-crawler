@@ -19,11 +19,13 @@
     }
 
     $scope.getProfiles = function(param, count) {
+      $scope.views.profilesLoading = true;
       CrawlerApiService.user().all({
         sortBy: param,
         count: count
       }, function(data) {
         $scope.profiles = data;
+        $scope.views.profilesLoading = false;
       })
     }
 
