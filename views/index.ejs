@@ -188,8 +188,8 @@
               </steam-user-media-badge>
             </div>
             <br />
-            <div class="col-xs-12" ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
-              <div class="row">
+            <div class="col-xs-12">
+              <div class="row" ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
                 <a class="col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 btn btn-steam" ng-click="friendsList.indexStart+friendsList.indexLength < player.friends.length ? friendsList.indexStart=friendsList.indexStart+friendsList.indexLength : friendsList.indexStart = 0">
                   <span ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
                     Show next {{friendsList.indexStart+(friendsList.indexLength*2) < player.friends.length ? friendsList.indexLength : player.friends.length - (friendsList.indexStart+friendsList.indexLength)}} friends
