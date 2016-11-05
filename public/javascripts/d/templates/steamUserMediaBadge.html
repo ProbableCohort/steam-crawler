@@ -12,7 +12,7 @@
         <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
       </h4>
       <div class="row media-content">
-        <div class="col col-xs-12" ng-show="!small && !(steamUser.playerlevel && steamUser.gamescount)">
+        <div class="col col-xs-12" ng-show="!small && !(steamUser.playerlevel || steamUser.gamescount)">
           &nbsp;
         </div>
         <div class="col col-xs-12" ng-show="!small">
