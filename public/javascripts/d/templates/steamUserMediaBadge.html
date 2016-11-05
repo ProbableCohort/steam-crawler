@@ -12,7 +12,7 @@
         <steam-persona-history-dropdown ng-model="steamUser.personahistory"></steam-persona-history-dropdown>
       </h4>
       <div class="row media-content">
-        <div class="col col-xs-12" ng-show="!small && !steamUser.playerlevel">
+        <div class="col col-xs-12" ng-show="!small && !(steamUser.playerlevel && steamUser.games.length)">
           &nbsp;
         </div>
         <div class="col col-xs-12" ng-show="!small">
@@ -21,10 +21,15 @@
           </strong>
           <span ng-if="steamUser.personastate == 0"> since {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
         </div>
-        <div class="col col-xs-12" ng-if="steamUser.playerlevel">
-          <span ng-class="getLevelColor(steamUser.playerlevel)">
-            <strong>Level {{steamUser.playerlevel}}</strong>
-          </span>
+        <div class="row row-marginless">
+          <div class="col col-xs-6">
+            <span ng-class="getLevelColor(steamUser.playerlevel)" ng-show="steamUser.playerlevel">
+              <strong>Level {{steamUser.playerlevel}}</strong>
+            </span>
+          </div>
+          <div class="col col-xs-6" style="color: white;" ng-show="steamUser.gamescount">
+            {{steamUser.gamescount}} Games
+          </div>
         </div>
         <div  class="col col-xs-6 text-muted">
           {{steamUser.friendssize}} Friends

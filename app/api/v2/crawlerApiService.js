@@ -91,17 +91,9 @@ var group = {
     },
     viewedAt: {
       $last: "$viewedAt"
-    },
-    games: {
-      $addToSet: {
-        "appid": "$games.appid",
-        "playtimeforever": {
-          $max: "$games.playtime_forever"
-        }
-      }
     }
-
   }
+
 }
 
 var project = {
@@ -123,7 +115,6 @@ var project = {
     "personahistory": "$personahistory",
     "friendsList": "$friendsList",
     "playerlevel": "$playerlevel",
-    "games": "$games",
     "gamescount": "$gamescount",
     "personahistorysize": {
       $size: "$personahistory"
@@ -226,7 +217,7 @@ function findProfilesBySteamIds(ids, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, unwindFriends, group, project, sort])
+    .aggregate([match, unwindFriends, unwindGames, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
@@ -313,6 +304,9 @@ function findAllProfiles(req, res) {
       "gameextrainfo": {
         $last: "$gameextrainfo"
       },
+      "gamescount": {
+        $max: "$gamescount",
+      },
       "personastate": {
         $last: "$personastate"
       },
@@ -350,6 +344,7 @@ function findAllProfiles(req, res) {
       "personahistory": "$personahistory",
       "gameid": "$gameid",
       "gameextrainfo": "$gameextrainfo",
+      "gamescount": "$gamescount",
       "playerlevel": "$playerlevel",
       "personahistorysize": {
         $size: "$personahistory"
