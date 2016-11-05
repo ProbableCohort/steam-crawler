@@ -58,10 +58,10 @@
         }, function(player) {
           $scope.player = player;
           $scope.player.profileUpdated = true;
+          $scope.updateProfileCount();
         })
         $scope.friendsList.indexStart = 0;
         $scope.history.unshift($scope.player);
-        $scope.updateProfileCount();
         $scope.searchResults = null;
         $scope.ready = true;
       })
