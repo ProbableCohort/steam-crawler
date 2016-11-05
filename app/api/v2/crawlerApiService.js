@@ -43,6 +43,12 @@ var group = {
     "viewedAt": {
       $last: "$viewedAt"
     },
+    "gameid": {
+      $last: "$gameid"
+    },
+    "gameextrainfo": {
+      $last: "$gameextrainfo"
+    },
     "communityvisibilitystate": {
       $last: "$communityvisibilitystate"
     },
@@ -90,6 +96,8 @@ var project = {
     "lastlogoff": "$lastlogoff",
     "viewedAt": "$viewedAt",
     "communityvisibilitystate": "$communityvisibilitystate",
+    "gameid": "$gameid",
+    "gameextrainfo": "$gameextrainfo",
     "personastate": "$personastate",
     "profilestate": "$profilestate",
     "primaryclanid": "$primaryclanid",
@@ -279,6 +287,12 @@ function findAllProfiles(req, res) {
       "viewedAt": {
         $last: "$viewedAt"
       },
+      "gameid": {
+        $last: "$gameid"
+      },
+      "gameextrainfo": {
+        $last: "$gameextrainfo"
+      },
       "personastate": {
         $last: "$personastate"
       },
@@ -314,6 +328,8 @@ function findAllProfiles(req, res) {
       "viewedAt": "$viewedAt",
       "personastate": "$personastate",
       "personahistory": "$personahistory",
+      "gameid": "$gameid",
+      "gameextrainfo": "$gameextrainfo",
       "playerlevel": "$playerlevel",
       "personahistorysize": {
         $size: "$personahistory"

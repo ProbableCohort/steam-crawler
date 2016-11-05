@@ -13,6 +13,8 @@ var steamUserSchema = mongoose.Schema({
   "loccityid": Number,
   "loccountrycode": String,
   "locstatecode": String,
+  "gameid": Number,
+  "gameextrainfo": String,
   "personaname": String,
   "personastate": Number,
   "personastateflags": Number,
