@@ -118,6 +118,13 @@
           name: 'Most Personas',
           onshow: $scope.getProfiles,
           value: 'personahistory'
+        },
+        mostGames: {
+          radio: 'mostGames',
+          show: false,
+          name: 'Most Games',
+          onshow: $scope.getProfiles,
+          value: 'gamescount'
         }
       },
       search: {

@@ -140,7 +140,7 @@ function findProfileBySteamId(id, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, unwindFriends, unwindGames, group, project, sort])
+    .aggregate([match, unwindFriends, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, user) {
       if (err)
@@ -217,7 +217,7 @@ function findProfilesBySteamIds(ids, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, unwindFriends, unwindGames, group, project, sort])
+    .aggregate([match, unwindFriends, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
