@@ -10,13 +10,13 @@ var service = {
 
 var BASE_URI = 'http://api.steampowered.com/' + 'IPlayerService/';
 
-function GetOwnedGames(req, res, cb) {
+function GetOwnedGames(id, cb) {
   // Calculate the Steam API URL we want to use
   var VERSION = 'v0001/'
   var url = BASE_URI + 'GetOwnedGames/' + VERSION;
   var query = {
     key: KEYS.STEAM_API_KEY,
-    steamid: req.params.id
+    steamid: id
   }
   var options = {
     url: url,
@@ -24,13 +24,10 @@ function GetOwnedGames(req, res, cb) {
   }
   request.get(options, function(error, steamHttpResponse, steamHttpBody) {
     if (error)
-      res.send(error);
+      return console.log(error);
     if (cb && typeof cb === 'function') {
-      cb(JSON.parse(steamHttpBody).response);
-      return;
+      return cb(JSON.parse(steamHttpBody).response);
     }
-    res.setHeader('Content-Type', 'application/json');
-    res.send(steamHttpBody);
   });
 }
 

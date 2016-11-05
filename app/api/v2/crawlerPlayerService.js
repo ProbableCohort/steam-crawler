@@ -24,7 +24,9 @@ function populateProfile(id, cb) {
   SteamUserService.GetPlayerSummaries(id, null, function(profiles) {
     getSteamLevel(profiles[0], function(profile) {
       populateFriends(profile, function(profile) {
-        updateProfile(profile, cb);
+        populateGames(profile, function(profile) {
+          updateProfile(profile, cb);
+        })
       })
     })
 
@@ -75,6 +77,14 @@ function populateFriends(profile, cb) {
     })
   })
 
+}
+
+function populateGames(profile, cb) {
+  SteamPlayerService.GetOwnedGames(profile.steamid, function(gamesInfo) {
+    profile.gamescount = gamesInfo.game_count;
+    profile.games = gamesInfo.games;
+    cb(profile);
+  })
 }
 
 function shuffleArray(array) {

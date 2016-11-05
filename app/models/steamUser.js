@@ -26,6 +26,12 @@ var steamUserSchema = mongoose.Schema({
   "playerlevel": Number,
   "viewedAt": Date,
   "timecreated": Number,
+  "gamescount": Number,
+  "games": [{
+    "_id": false,
+    "appid": Number,
+    "playtime_forever": Number
+  }],
   "friendsList": [String]
 }, {
   timestamps: true

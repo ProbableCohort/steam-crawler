@@ -15,9 +15,16 @@ var service = {
 
 ////////////////////////////////////////
 
-var unwind = {
+var unwindFriends = {
   $unwind: {
     path: "$friendsList",
+    preserveNullAndEmptyArrays: true
+  }
+}
+
+var unwindGames = {
+  $unwind: {
+    path: "$games",
     preserveNullAndEmptyArrays: true
   }
 }
@@ -67,6 +74,9 @@ var group = {
     playerlevel: {
       $max: "$playerlevel"
     },
+    gamescount: {
+      $max: "$gamescount"
+    },
     personahistory: {
       $addToSet: {
         personaname: "$personaname",
@@ -81,6 +91,14 @@ var group = {
     },
     viewedAt: {
       $last: "$viewedAt"
+    },
+    games: {
+      $addToSet: {
+        "appid": "$games.appid",
+        "playtimeforever": {
+          $max: "$games.playtime_forever"
+        }
+      }
     }
 
   }
@@ -105,6 +123,8 @@ var project = {
     "personahistory": "$personahistory",
     "friendsList": "$friendsList",
     "playerlevel": "$playerlevel",
+    "games": "$games",
+    "gamescount": "$gamescount",
     "personahistorysize": {
       $size: "$personahistory"
     },
@@ -129,7 +149,7 @@ function findProfileBySteamId(id, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, unwind, group, project, sort])
+    .aggregate([match, unwindFriends, unwindGames, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, user) {
       if (err)
@@ -162,7 +182,7 @@ function findProfileByPersonaName(name, res) {
     }
   }
   SteamUser
-    .aggregate([match, unwindPersonaname, match, unwind, group, project, sort])
+    .aggregate([match, unwindPersonaname, match, unwindFriends, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
@@ -206,7 +226,7 @@ function findProfilesBySteamIds(ids, res, cb) {
     }
   }
   SteamUser
-    .aggregate([match, unwind, group, project, sort])
+    .aggregate([match, unwindFriends, group, project, sort])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
@@ -242,7 +262,7 @@ function findLastProfilesByCount(count, res) {
     $limit: count
   }
   SteamUser
-    .aggregate([match, unwind, group, sort, limit])
+    .aggregate([match, unwindFriends, group, sort, limit])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
@@ -368,7 +388,7 @@ function findAllProfiles(req, res) {
     }
   }
 
-  var pipeline = [match, unwind, group, project, sort];
+  var pipeline = [match, unwindFriends, group, project, sort];
   if (!req.query.all) {
     pipeline.push(limit);
   }
@@ -430,7 +450,7 @@ function findProfilesWithPersonaHistory(count, res) {
     $limit: count
   }
   SteamUser
-    .aggregate([unwind, group, sort, project, sortProject, limit])
+    .aggregate([unwindFriends, group, sort, project, sortProject, limit])
     .allowDiskUse(true)
     .exec(function(err, users) {
       if (err)
