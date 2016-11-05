@@ -58,6 +58,7 @@
         }, function(player) {
           $scope.player = player;
           $scope.player.profileUpdated = true;
+          $scope.friendsList.indexStart = 0;
           $scope.updateProfileCount();
         })
         $scope.friendsList.indexStart = 0;
@@ -176,6 +177,38 @@
       },
       indexStart: 0,
       indexLength: 10
+    }
+
+    $scope.determinePersonaState = function(entity) {
+      if (!entity)
+        return;
+      var stateId = entity.personastate;
+      switch (stateId) {
+        case 0:
+          status = 6;
+          break;
+        case 1:
+          status = 0;
+          break;
+        case 2:
+          status = 4;
+          break;
+        case 3:
+          status = 3;
+          break;
+        case 4:
+          status = 5;
+          break;
+        case 5:
+          status = 2;
+          break;
+        case 6:
+          status = 1;
+          break;
+        default:
+          break;
+      }
+      return status;
     }
 
     $scope.getAppInfo = function() {

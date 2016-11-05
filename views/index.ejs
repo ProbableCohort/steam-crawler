@@ -184,7 +184,7 @@
             </div>
             <div style="margin-left: 30px;">
               <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1"
-                ng-repeat="friend in player.friends | orderBy:['status', '-timesviewed', '-steamid' ] | limitTo:friendsList.indexLength:friendsList.indexStart">
+                ng-repeat="friend in player.friends | orderBy:[determinePersonaState, '-timesviewed', '-steamid' ] | limitTo:friendsList.indexLength:friendsList.indexStart">
               </steam-user-media-badge>
             </div>
             <br />
