@@ -4,7 +4,8 @@ var express = require('express'),
   KEYS = require('../../../private/keys'),
   CrawlerApiService = require('./crawlerApiService'),
   CrawlerUserController = require('./crawlerUserController'),
-  CrawlerPlayerController = require('./crawlerPlayerController');
+  CrawlerPlayerController = require('./crawlerPlayerController'),
+  CrawlerGameController = require('./crawlerGameController');
 
 var SteamUser = require('../../models/steamUser');
 
@@ -18,5 +19,6 @@ api.get('/personas', function(req, res) {
 
 api.use('/user', CrawlerUserController);
 api.use('/player', CrawlerPlayerController);
+api.use('/game', CrawlerGameController);
 
 module.exports = api;
