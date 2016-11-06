@@ -1,6 +1,6 @@
 {
   "name": "steam-crawler",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www"
