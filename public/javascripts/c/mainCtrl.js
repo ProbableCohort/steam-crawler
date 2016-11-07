@@ -213,7 +213,8 @@
 
     $scope.getAppInfo = function() {
       var legalText = [
-        "All of this stuff is from Steam through the Web API. ",
+        "This product is in no way affiliated with or endorsed by Valve or Steam.",
+        "All data is gathered through the Steam Web API. ",
         "By using this service you agree not to do anything bad to our stuff or theirs, and accept the data 'as-is'. ",
         "Don't be a jackass."
       ]

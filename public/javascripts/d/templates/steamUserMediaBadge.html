@@ -16,7 +16,7 @@
           &nbsp;
         </div>
         <div class="col col-xs-12" ng-show="!small">
-          <strong ng-class="{ 'text-success' : steamUser.status == 0, 'text-danger' : steamUser.status == 2, 'text-warning' : steamUser.status == 1 }">
+          <strong ng-class="{ 'text-success' : steamUser.status < 3, 'text-danger' : steamUser.status < 10 && steamUser.status > 4, 'text-warning' : steamUser.status < 4 && steamUser.status > 2 }">
             {{determinePersonaState(steamUser)}}
           </strong>
           <span ng-if="steamUser.personastate == 0"> since {{steamUser.lastlogoff * 1000 | date:'short'}}</span>
