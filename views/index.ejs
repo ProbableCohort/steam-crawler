@@ -62,7 +62,7 @@
             <a ng-click="view.onshow(view.value, view.value2)"><span class="fa fa-refresh fa-steam-href fa-lg"></span></a>
           </h3>
           <div class="row container">
-              <steam-user-media-badge class="col-xs-12 col-sm-6 col-md-4" ng-model="p" small col="1" ng-repeat="p in profiles | limitTo:9"></steam-user-media-badge>
+              <steam-user-media-badge class="col-xs-12 col-sm-6 col-md-4" ng-model="p" small col="1" ng-repeat="p in profiles | orderBy:view.value:true | limitTo:9"></steam-user-media-badge>
           </div>
         </div>
       </div>

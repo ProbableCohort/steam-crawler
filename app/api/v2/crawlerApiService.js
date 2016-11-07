@@ -266,7 +266,7 @@ function findLastProfilesByCount(count, res) {
     })
 }
 
-function findAllProfiles(req, res) {
+function findAllProfiles(req, res, cb) {
   console.log('[' + new Date().getTime() + ']' + 'findAllProfiles running');
   var sort = {
     $sort: {
@@ -286,49 +286,9 @@ function findAllProfiles(req, res) {
       "steamid": {
         $last: "$steamid"
       },
-      "personaname": {
-        $last: "$personaname"
-      },
-      "avatarfull": {
-        $last: "$avatarfull"
-      },
       "createdAt": {
         $last: "$createdAt"
-      },
-      "viewedAt": {
-        $last: "$viewedAt"
-      },
-      "gameid": {
-        $last: "$gameid"
-      },
-      "gameextrainfo": {
-        $last: "$gameextrainfo"
-      },
-      "gamescount": {
-        $max: "$gamescount",
-      },
-      "personastate": {
-        $last: "$personastate"
-      },
-      playerlevel: {
-        $max: "$playerlevel"
-      },
-      personahistory: {
-        $addToSet: {
-          personaname: "$personaname",
-          avatarfull: "$avatarfull"
-        }
-      },
-      friendsList: {
-        $addToSet: "$friendsList"
-      },
-      views: {
-        $addToSet: "$viewedAt"
-      },
-      viewedAt: {
-        $last: "$viewedAt"
       }
-
     }
   }
 
@@ -336,36 +296,63 @@ function findAllProfiles(req, res) {
     $project: {
       "_id": "$_id",
       "steamid": "$steamid",
-      "personaname": "$personaname",
-      "avatarfull": "$avatarfull",
-      "createdAt": "$createdAt",
-      "viewedAt": "$viewedAt",
-      "personastate": "$personastate",
-      "personahistory": "$personahistory",
-      "gameid": "$gameid",
-      "gameextrainfo": "$gameextrainfo",
-      "gamescount": "$gamescount",
-      "playerlevel": "$playerlevel",
-      "personahistorysize": {
-        $size: "$personahistory"
-      },
-      "friendssize": {
-        $size: "$friendsList"
-      },
-      "timesviewed": {
-        $size: "$views"
-      }
+      "createdAt": "$createdAt"
     }
   }
   if (req.query.sortBy) {
     var sortParam = req.query.sortBy;
     switch (req.query.sortBy) {
-      case 'personahistory':
-      case 'friends':
-        sortParam = sortParam + 'size';
+      case 'personahistorysize':
+        group.$group['personahistory'] = {
+          $addToSet: {
+            personaname: "$personaname",
+            avatarfull: "$avatarfull"
+          }
+        }
+        project.$project['personahistorysize'] = {
+          $size: "$personahistory"
+        }
+        break;
+      case 'friendssize':
+        group.$group['friendsList'] = {
+          $addToSet: "$friendsList"
+        }
+        project.$project['friendssize'] = {
+          $size: "$friendsList"
+        }
         break;
       case 'timesviewed':
+        group.$group['views'] = {
+          $addToSet: "$viewedAt"
+        }
+        project.$project['timesviewed'] = {
+          $size: "$views"
+        }
+        break;
       case 'playerlevel':
+        group.$group['playerlevel'] = {
+          $max: "$playerlevel"
+        }
+        project.$project['playerlevel'] = "$playerlevel";
+        break;
+      case 'gamescount':
+        group.$group['gamescount'] = {
+          $max: "$gamescount"
+        }
+        project.$project['gamescount'] = "$gamescount";
+        break;
+      case 'viewedAt':
+        match = {
+          $match: {
+            viewedAt: {
+              $exists: true
+            }
+          }
+        }
+        group.$group['viewedAt'] = {
+          $first: '$viewedAt'
+        }
+        project.$project['viewedAt'] = "$viewedAt";
         break;
       default:
         break;
@@ -398,6 +385,8 @@ function findAllProfiles(req, res) {
       var aggregateEndTime = new Date().getTime();
       console.log('[' + aggregateEndTime + ']' + 'findAllProfiles aggregate ends');
       console.log('[' + aggregateEndTime + ']' + 'findAllProfiles aggregate lasted ' + (aggregateEndTime - aggregateStartTime) + 'ms');
+      if (cb)
+        return cb(users);
       res.send(users);
     })
 }

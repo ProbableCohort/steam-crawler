@@ -20,7 +20,7 @@
 
     $scope.getProfiles = function(param, count) {
       $scope.views.profilesLoading = true;
-      CrawlerApiService.user().all({
+      CrawlerApiService.profile().all({
         sortBy: param,
         count: count
       }, function(data) {
@@ -104,7 +104,7 @@
           show: false,
           name: 'Most Friends',
           onshow: $scope.getProfiles,
-          value: 'friends'
+          value: 'friendssize'
         },
         level: {
           radio: 'level',
@@ -118,7 +118,7 @@
           show: false,
           name: 'Most Personas',
           onshow: $scope.getProfiles,
-          value: 'personahistory'
+          value: 'personahistorysize'
         },
         mostGames: {
           radio: 'mostGames',
@@ -213,7 +213,7 @@
 
     $scope.getAppInfo = function() {
       var legalText = [
-        "This product is in no way affiliated with or endorsed by Valve or Steam.",
+        "This product is in no way affiliated with or endorsed by Valve or Steam. ",
         "All data is gathered through the Steam Web API. ",
         "By using this service you agree not to do anything bad to our stuff or theirs, and accept the data 'as-is'. ",
         "Don't be a jackass."

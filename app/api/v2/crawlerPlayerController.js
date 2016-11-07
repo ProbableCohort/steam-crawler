@@ -6,6 +6,27 @@ var express = require('express'),
   SteamUserService = require('./steamUserService'),
   SteamPlayerService = require('./steamPlayerService');
 
+api.get('/all/', function(req, res) {
+  CrawlerApiService.findAllProfiles(req, null, function(slimProfiles) {
+    var ids = [];
+    for (var i in slimProfiles) {
+      ids.push(slimProfiles[i].steamid)
+    }
+    CrawlerApiService.findProfilesBySteamIds(ids, null, function(profiles) {
+      if (req.query.sortBy == 'viewedAt') {
+        for (var i in slimProfiles) {
+          for (var j in profiles) {
+            if (profiles[j].steamid == slimProfiles[i].steamid) {
+              profiles[j].viewedAt = slimProfiles[i].viewedAt;
+            }
+          }
+        }
+      }
+      res.send(profiles);
+    });
+  });
+})
+
 api.get('/:id', function(req, res) {
   if (req.query.refresh) {
     CrawlerPlayerService.populateProfile(req.params.id, function(profile) {
@@ -19,10 +40,6 @@ api.get('/:id', function(req, res) {
 })
 
 ///
-
-api.get('/all/', function(req, res) {
-  CrawlerApiService.findAllProfiles(req, res);
-})
 
 api.get('/all/count', function(req, res) {
   CrawlerApiService.countAllProfiles(res);
