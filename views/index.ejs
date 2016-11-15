@@ -104,7 +104,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12" ng-show="searchResults && search.personaname.length">
-          {{searchResults.length}} results found for a Steam Name like {{search.personaname}}
+          {{searchResults.length}} results found for a Steam Name like '{{search.personaname}}'
         </div>
         <div class="col-xs-6 col-sm-4 steam-search-result" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults| limitTo:12">
           <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
