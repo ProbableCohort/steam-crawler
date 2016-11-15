@@ -9,6 +9,7 @@
     $scope.appInfo = {};
     $scope.forms = {};
     $scope.history = [];
+    $scope.search = {};
 
     $scope.stats = {};
 
@@ -134,13 +135,14 @@
           name: 'Search by Steam Name'
         },
         playerId: {
-          show: true,
+          show: false,
           name: 'Search by SteamID'
         },
         history: {
           show: true,
           name: 'Show Search Results'
         }
+
       }
     }
 

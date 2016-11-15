@@ -78,7 +78,7 @@
               <label>Steam Name</label>
               <div class="input-group">
                 <input class="form-control form-control-steam" type="text"
-                  ng-model="player.personaname" ng-change="findPlayerByName(player.personaname)" ng-model-options="{ debounce : 300 }"/>
+                  ng-model="search.personaname" ng-change="findPlayerByName(search.personaname)" ng-model-options="{ debounce : 300 }"/>
                 <span class="input-group-btn">
                   <a class="btn btn-steam"><span class="fa fa-search"></span></a>
                 </span>
@@ -88,7 +88,7 @@
               <label>PlayerID</label>
               <div class="input-group">
                 <input class="form-control form-control-steam" type="text" name="steamid"
-                  ng-model="player.steamid" ng-change="findPlayerInfo(player.steamid)" ng-model-options="{ debounce : 300 }"
+                  ng-model="search.steamid" ng-change="findPlayerInfo(search.steamid)" ng-model-options="{ debounce : 300 }"
                   ng-minlength="17" ng-maxlength="17" />
                 <span class="input-group-btn">
                   <a class="btn btn-steam" ng-click="findPlayerInfo(player.steamid)"><span class="fa fa-search"></span></a>
@@ -103,8 +103,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12" ng-show="searchResults && player.personaname.length">
-          {{searchResults.length}} results found for a Steam Name like {{player.personaname}}
+        <div class="col-xs-12" ng-show="searchResults && search.personaname.length">
+          {{searchResults.length}} results found for a Steam Name like {{search.personaname}}
         </div>
         <div class="col-xs-6 col-sm-4 steam-search-result" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults | unique:'personaname' | limitTo:12">
           <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
@@ -123,7 +123,7 @@
         <div class="col-xs-12">
           <h4>Previous Searches</h4>
         </div>
-        <div ng-repeat="player in history | unique:'personaname'" class="col-xs-6 col-sm-4 steam-search-history" style="margin-bottom: 5px; height: 38px;" ng-hide="$index == 0">
+        <div ng-repeat="player in history | unique:'steamid'" class="col-xs-6 col-sm-4 steam-search-history" style="margin-bottom: 5px; height: 38px;" ng-hide="$index == 0">
           <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
           <a ng-click="findPlayerInfo(player.steamid)" ng-class="{ 'smaller' : player.personaname.length > 22, 'smallest' : player.personaname.length > 30 }">{{player.personaname}}</a>
         </div>
