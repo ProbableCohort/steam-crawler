@@ -106,7 +106,7 @@
         <div class="col-xs-12" ng-show="searchResults && search.personaname.length">
           {{searchResults.length}} results found for a Steam Name like {{search.personaname}}
         </div>
-        <div class="col-xs-6 col-sm-4 steam-search-result" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults | unique:'personaname' | limitTo:12">
+        <div class="col-xs-6 col-sm-4 steam-search-result" style="margin-bottom: 5px; height: 38px;" ng-repeat="player in searchResults| limitTo:12">
           <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
           <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
         </div>
@@ -179,8 +179,12 @@
           <div ng-show="!player.friendsList.length && player.profileUpdated">
             No friends found for this profile.
           </div>
+          <div ng-show="!player.friendsList.length && !player.profileUpdated">
+            <span class="fa fa-circle-o-notch fa-spin fa-lg"></span>
+            Loading friends...
+          </div>
           <br />
-          <div class="row container">
+          <div class="row container" ng-show="player.friendsList.length">
             <div class="col-xs-12">
               <custom-button-group radio ng-model="friendsList.size"></custom-button-group>
             </div>
