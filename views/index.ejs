@@ -24,6 +24,7 @@
     <script type="text/javascript" src="/javascripts/d/steamPersonaHistoryDropdown.js"></script>
     <script type="text/javascript" src="/javascripts/d/steamUserMediaBadge.js"></script>
     <script type="text/javascript" src="/javascripts/d/customButtonGroup.js"></script>
+    <script type="text/javascript" src="/javascripts/d/pageableList.js"></script>
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -184,36 +185,19 @@
             Loading friends...
           </div>
           <br />
-          <div class="row container" ng-show="player.friendsList.length">
-            <div class="col-xs-12">
-              <custom-button-group radio ng-model="friendsList.size"></custom-button-group>
-            </div>
-            <div style="margin-left: 30px;">
-              <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1"
-                ng-repeat="friend in player.friends | orderBy:[determinePersonaState, '-timesviewed', '-steamid' ] | limitTo:friendsList.indexLength:friendsList.indexStart">
-              </steam-user-media-badge>
-            </div>
-            <br />
-            <div class="col-xs-12">
-              <div class="row" ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
-                <a class="col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 btn btn-steam" ng-click="friendsList.indexStart+friendsList.indexLength < player.friends.length ? friendsList.indexStart=friendsList.indexStart+friendsList.indexLength : friendsList.indexStart = 0">
-                  <span ng-show="friendsList.indexStart+friendsList.indexLength < player.friends.length">
-                    Show next {{friendsList.indexStart+(friendsList.indexLength*2) < player.friends.length ? friendsList.indexLength : player.friends.length - (friendsList.indexStart+friendsList.indexLength)}} friends
-                  </span>
-                  <span ng-show="friendsList.indexStart+friendsList.indexLength >= player.friends.length">
-                    Back to beginning of Friends List
-                  </span>
-                </a>
+          <pageable-list ng-show="player.friendsList.length"
+            list-size="player.friends.length"
+            list-start="lists.friends.indexStart"
+            list-length="lists.friends.indexLength"
+            list-type="'friends'">
+            <pageable-list-contents>
+              <div style="margin-left: 30px;">
+                <steam-user-media-badge class="col-sm-6" ng-model="friend" col="1"
+                  ng-repeat="friend in player.friends | orderBy:[determinePersonaState, '-timesviewed', '-steamid' ] | limitTo:lists.friends.indexLength:lists.friends.indexStart">
+                </steam-user-media-badge>
               </div>
-              <br />
-              <div class="text-center">
-                Showing {{friendsList.indexStart + 1}} to {{friendsList.indexStart+friendsList.indexLength < player.friends.length ? friendsList.indexStart+friendsList.indexLength : player.friends.length}} out of {{player.friends.length}} friends
-                <a class="fa fa-refresh fa-steam-href" ng-click="friendsList.indexStart=0" ng-show="friendsList.indexStart>0"
-                  uib-popover="Back to beginning of Friends List" popover-trigger="'mouseenter'" popover-class="popover-steam">
-                </a>
-              </div>
-            </div>
-          </div>
+            </pageable-list-contents>
+          </pageable-list>
         </div>
       </div>
     </div>

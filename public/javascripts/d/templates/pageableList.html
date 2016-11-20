@@ -1,0 +1,26 @@
+<div class="row container">
+  <div class="col-xs-12">
+    <custom-button-group radio ng-model="list.size"></custom-button-group>
+  </div>
+  <div ng-transclude="list"></div>
+  <br />
+  <div class="col-xs-12">
+    <div class="row" ng-show="listStart+listLength < listSize">
+      <a class="col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 btn btn-steam" ng-click="listStart+listLength < listSize ? listStart=listStart+listLength : listStart = 0">
+        <span ng-show="listStart+listLength < listSize">
+          Show next {{listStart+(listLength*2) < listSize ? listLength : listSize - (listStart+listLength)}} {{list.type}}
+        </span>
+        <span ng-show="listStart+listLength >= listSize">
+          Back to beginning of {{list.type}} List
+        </span>
+      </a>
+    </div>
+    <br />
+    <div class="text-center">
+      Showing {{listStart + 1}} to {{listStart+listLength < listSize ? listStart+listLength : listSize}} out of {{listSize}} {{list.type}}
+      <a class="fa fa-refresh fa-steam-href" ng-click="listStart=0" ng-show="listStart>0"
+        uib-popover="Back to beginning of {{list.type}} List" popover-trigger="'mouseenter'" popover-class="popover-steam">
+      </a>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@
     $scope.forms = {};
     $scope.history = [];
     $scope.search = {};
+    $scope.lists = {};
 
     $scope.stats = {};
 
@@ -59,19 +60,14 @@
         }, function(player) {
           $scope.player = player;
           $scope.player.profileUpdated = true;
-          $scope.friendsList.indexStart = 0;
+          $scope.lists.friends.indexStart = 0;
           $scope.updateProfileCount();
         })
-        $scope.friendsList.indexStart = 0;
+        $scope.lists.friends.indexStart = 0;
         $scope.history.unshift($scope.player);
         $scope.searchResults = null;
         $scope.ready = true;
       })
-    }
-
-    $scope.setFriendsListSize = function(size) {
-      $scope.friendsList.indexStart = 0;
-      $scope.friendsList.indexLength = size;
     }
 
     $scope.views = {
@@ -144,41 +140,6 @@
         }
 
       }
-    }
-
-    $scope.friendsList = {
-      size: {
-        ten: {
-          radio: 'ten',
-          show: true,
-          name: '10',
-          onshow: $scope.setFriendsListSize,
-          value: 10
-        },
-        twenty: {
-          radio: 'twenty',
-          show: false,
-          name: '20',
-          onshow: $scope.setFriendsListSize,
-          value: 20
-        },
-        fifty: {
-          radio: 'fifty',
-          show: false,
-          name: '50',
-          onshow: $scope.setFriendsListSize,
-          value: 50
-        },
-        hundred: {
-          radio: 'hundred',
-          show: false,
-          name: '100',
-          onshow: $scope.setFriendsListSize,
-          value: 100
-        }
-      },
-      indexStart: 0,
-      indexLength: 10
     }
 
     $scope.determinePersonaState = function(entity) {
