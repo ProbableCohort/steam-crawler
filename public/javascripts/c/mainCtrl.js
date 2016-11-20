@@ -35,10 +35,14 @@
       if (!name || !name.length) {
         return;
       }
+      $scope.search.running = true;
       CrawlerApiService.user().query({
         personaname: name
       }, function(results) {
-        $scope.searchResults = results;
+        if ($scope.search.personaname === name) {
+          $scope.searchResults = results;
+          $scope.search.running = false;
+        }
       })
     }
 

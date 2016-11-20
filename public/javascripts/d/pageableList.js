@@ -28,6 +28,7 @@
     function controllerFn($scope) {
       $scope.listStart = 0;
       $scope.listLength = 10;
+      $scope.smallestListSize = $scope.listLength;
 
       $scope.setListSize = function(size) {
         $scope.listStart = 0;
