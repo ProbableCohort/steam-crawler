@@ -116,11 +116,12 @@
             list-size="searchResults.length"
             list-start="lists.searchResults.indexStart"
             list-length="lists.searchResults.indexLength"
+            list-increment="12"
             list-type="'search results'">
             <pageable-list-contents>
               <div class="col-xs-6 col-sm-4 steam-search-result"
                 style="margin-bottom: 5px; height: 38px;"
-                ng-repeat="player in searchResults| limitTo: lists.searchResults.indexLength:lists.searchResults.indexStart">
+                ng-repeat="player in searchResults | limitTo: lists.searchResults.indexLength:lists.searchResults.indexStart">
                 <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
                 <a ng-click="findPlayerInfo(player.steamid)">{{player.personaname}}</a>
               </div>

@@ -13,7 +13,8 @@
         listSize: '=listSize',
         listStart: '=listStart',
         listLength: '=listLength',
-        listType: '=listType'
+        listType: '=listType',
+        listIncrement: '=listIncrement'
       },
       transclude: {
         list: 'pageableListContents'
@@ -65,8 +66,23 @@
             onshow: $scope.setListSize,
             value: 100
           }
-        },
-        type: $scope.listType
+        }
+      }
+
+      if ($scope.listIncrement) {
+        $scope.listLength = $scope.listIncrement;
+        $scope.smallestListSize = $scope.listLength;
+        $scope.list.size = {}
+        for (var i = 1; i <= 4; i++) {
+          var thisSize = $scope.listIncrement * i * (i > 1 ? i - 1 : 1);
+          $scope.list.size[thisSize.toString()] = {
+            radio: thisSize.toString(),
+            show: i === 1,
+            name: thisSize.toString(),
+            onshow: $scope.setListSize,
+            value: thisSize
+          }
+        }
       }
     }
   }
