@@ -140,7 +140,7 @@
         },
         history: {
           show: true,
-          name: 'Show Search Results'
+          name: 'Show Recently Viewed Profiles'
         }
 
       }
