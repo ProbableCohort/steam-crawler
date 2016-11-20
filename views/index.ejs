@@ -140,9 +140,9 @@
         <div class="col-xs-12">
           <h4>Previous Searches</h4>
         </div>
-        <div ng-repeat="player in history | unique:'steamid'"
-          class="col-xs-6 col-sm-4 steam-search-history"
+        <div class="col-xs-6 col-sm-4 steam-search-history"
           style="margin-bottom: 5px; height: 38px;"
+          ng-repeat="player in history | unique:'steamid' | limitTo:9"
           ng-hide="$index == 0">
           <img class="personahistory-avatar" ng-src="{{player.avatarfull}}" ng-class="{ 'steam-status-online' : player.status == 0 }"/>
           <a ng-click="findPlayerInfo(player.steamid)" ng-class="{ 'smaller' : player.personaname.length > 22, 'smallest' : player.personaname.length > 30 }">{{player.personaname}}</a>
